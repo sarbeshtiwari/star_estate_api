@@ -1,0 +1,33 @@
+Your current IP address (182.156.189.94) has been added to enable local connectivity
+username: rahul8454454singh
+password: EuvjmsF66uoRVTxF
+
+
+
+3. Add your connection string into your application code
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://rahul8454454singh:EuvjmsF66uoRVTxF@starestate.uf5vy.mongodb.net/?retryWrites=true&w=majority&appName=starestate";
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);
