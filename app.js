@@ -6,7 +6,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const dbConfig = require('./config/db');
 const jobRoutes = require('./routes/jobRoutes');
 const amenitiesRoutes = require('./routes/amenitiesRoutes');
-const subAmenitiesRoutes = require('./routes/subamenitiesRoutes');
+const subAmenitiesRoutes = require('./routes/subAmenitiesRoutes');
 const bankRoutes = require('./routes/bankRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const developerRoutes = require('./routes/developerRoutes')
@@ -32,15 +32,12 @@ const projectBrochureWalkthroughRoutes = require('./routes/dashboard/projectBroc
 const cityRoutes = require('./routes/cityRoutes');
 const subCityRoutes = require('./routes/subCityRoutes');
 
+const authRoutes = require('./routes/auth/authRoutes');
+const protectedRoutes = require('./routes/auth/protectedRoutes');
+
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*'); // Allow all origins
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-  });
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); // Enable CORS for all routes
 app.use('/uploads', express.static('uploads'));
@@ -77,6 +74,13 @@ app.use('/projectFloorPlan', projectFloorPlanRoutes);
 app.use('/projectFaq', projectfaqRoutes);
 app.use('/projectContentSEO', projectContentSEORoutes);
 app.use('/projectBrochureWalkthrough', projectBrochureWalkthroughRoutes);
+
+
+//auth
+app.use('/auth', authRoutes);
+app.use('/protected', protectedRoutes);
+
+
 
 app.use(errorHandler);
 
