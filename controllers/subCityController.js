@@ -59,7 +59,7 @@ exports.getSubCityByCityAndType = async (req, res) => {
         console.log(subCity)
 
         if (!subCity.length) {
-            console.log(not found')
+            console.log('not found')
             return res.status(404).json({ error: 'Sub City or type not found' });
         }
 
