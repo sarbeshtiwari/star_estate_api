@@ -48,18 +48,18 @@ exports.getSubCities = async (req, res) => {
 };
 
 exports.getSubCityByCityAndType = async (req, res) => {
-    const { sub_city, content_type } = req.params;
-    console.log(sub_city)
+    const { city, content_type } = req.params;
+
 
     try {
         const subCity = await SubCity.find({
-            sub_city: sub_city,
+            city: city,
             'data.content_type': content_type
         });
-        console.log(subCity)
+      
 
         if (!subCity.length) {
-            console.log('not found')
+ 
             return res.status(404).json({ error: 'Sub City or type not found' });
         }
 
