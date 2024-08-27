@@ -101,9 +101,9 @@ exports.updateSubAmenity = async (req, res) => {
     const { id } = req.params;
     const { amenityArray } = req.body;
 
-    if (!Array.isArray(amenityArray)) {
-        return res.status(400).json({ success: false, message: "Request body must be an array" });
-    }
+    // if (!Array.isArray(amenityArray)) {
+    //     return res.status(400).json({ success: false, message: "Request body must be an array" });
+    // }
 
     try {
         const results = [];
