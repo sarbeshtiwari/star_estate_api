@@ -9,7 +9,7 @@ const CityDataSchema = new mongoose.Schema({
     schema: { type: String },
     content_above_faqs: { type: String },
     image: { type: String }
-});
+}, { _id: false });
 
 const CitySchema = new mongoose.Schema({
     location: { type: String, required: true },
