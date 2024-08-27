@@ -121,12 +121,16 @@ exports.updateNews = async (req, res) => {
         // Handle file uploads if provided
         if (req.files) {
             if (req.files.newsThumb) {
+                console.log("Updating newsThumb:", req.files.newsThumb[0].filename);
                 updateData.newsThumb = req.files.newsThumb[0].filename;
             }
             if (req.files.newsImage) {
+                console.log("Updating newsImage:", req.files.newsImage[0].filename);
                 updateData.newsImage = req.files.newsImage[0].filename;
             }
         }
+
+        console.log("Update Data:", updateData);
 
         // Update the news item
         const updatedNews = await NewsModel.findByIdAndUpdate(newsId, updateData, { new: true });
@@ -140,6 +144,7 @@ exports.updateNews = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
+
 
 
 // exports.updateNews = async (req, res) => {
