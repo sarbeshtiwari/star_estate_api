@@ -193,20 +193,26 @@ exports.updateSubCity = async (req, res) => {
             image: imagePath || item.image
         }));
 
+        console.log(updatedData);
+
         const existingSubCity = await SubCity.findOne({ sub_city: subCityId });
+        console.log(existingSubCity);
 
         if (!existingSubCity) {
             return res.status(404).json({ success: false, message: "Sub City not found" });
         }
 
         const existingTypeIndex = existingSubCity.data.findIndex(item => item.content_type === content_type);
+        console.log(existingTypeIndex)
 
         if (existingTypeIndex !== -1) {
             const newData = updatedData.find(item => item.content_type === content_type);
             if (newData) {
+                console.log(newData);
                 existingSubCity.data[existingTypeIndex] = { ...existingSubCity.data[existingTypeIndex], ...newData };
             }
         } else {
+            console.log('existing')
             existingSubCity.data.push(...updatedData);
         }
 
