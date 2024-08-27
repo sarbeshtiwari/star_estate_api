@@ -83,8 +83,8 @@ exports.updateNews = async (req, res) => {
     const newsId = req.params.id;
     const updateData = req.body;
 
-    if (req.file) {
-        updateData.NewsLogo = req.file.filename;
+    if (!req.files || !req.files.newsThumb || !req.files.newsImage) {
+        return res.status(400).json({ success: false, message: 'No files uploaded' });
     }
 
     try {
