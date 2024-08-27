@@ -81,23 +81,86 @@ exports.getNewsById = async (req, res) => {
 
 exports.updateNews = async (req, res) => {
     const newsId = req.params.id;
-    const updateData = req.body;
+    const {
+        metaTitle, 
+        metaKeyword, 
+        metaDesc, 
+        heading,
+        paperName,
+        newsDate,
+        newsState,
+        imageTitle,
+        status
+    } = req.body;
 
-    // if (!req.files || !req.files.newsThumb || !req.files.newsImage) {
-    //     return res.status(400).json({ success: false, message: 'No files uploaded' });
-    // }
+    // Check for required fields
+    if (!heading || !paperName || !newsState || !imageTitle) {
+        return res.status(400).json({ success: false, message: "Heading, paper name, news state, and image title are required" });
+    }
 
     try {
+        // Find the existing news item
+        const existingNews = await NewsModel.findById(newsId);
+        if (!existingNews) {
+            return res.status(404).json({ success: false, message: "News not found" });
+        }
+
+        // Prepare update data
+        const updateData = {
+            metaTitle, 
+            metaKeyword, 
+            metaDesc, 
+            heading,
+            paperName,
+            newsDate,
+            newsState,
+            imageTitle,
+            status
+        };
+
+        // Handle file uploads if provided
+        if (req.files) {
+            if (req.files.newsThumb) {
+                updateData.newsThumb = req.files.newsThumb[0].filename;
+            }
+            if (req.files.newsImage) {
+                updateData.newsImage = req.files.newsImage[0].filename;
+            }
+        }
+
+        // Update the news item
         const updatedNews = await NewsModel.findByIdAndUpdate(newsId, updateData, { new: true });
         if (!updatedNews) {
             return res.status(404).json({ success: false, message: "News not found" });
         }
+
         res.json({ success: true, message: "News updated successfully", updatedNews });
     } catch (err) {
         console.error("Update Error:", err);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
+
+
+// exports.updateNews = async (req, res) => {
+//     const newsId = req.params.id;
+//     const updateData = req.body;
+
+//     // if (!req.files || !req.files.newsThumb || !req.files.newsImage) {
+//     //     return res.status(400).json({ success: false, message: 'No files uploaded' });
+//     // }
+
+//     try {
+//         const updatedNews = await NewsModel.findByIdAndUpdate(newsId, updateData, { new: true });
+//         if (!updatedNews) {
+//             return res.status(404).json({ success: false, message: "News not found" });
+//         }
+//         res.json({ success: true, message: "News updated successfully", updatedNews });
+//     } catch (err) {
+//         console.error("Update Error:", err);
+//         res.status(500).json({ success: false, message: "Internal Server Error" });
+//     }
+// };
 
 exports.updateNewsStatus = async (req, res) => {
     const { id } = req.params;
