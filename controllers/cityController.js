@@ -154,6 +154,7 @@ exports.updateCity = async (req, res) => {
 
         if (existingTypeIndex !== -1) {
             const newData = updatedData.find(item => item.location_type === location_type);
+            console.log(newData)
             if (newData) {
                 console.log('newData')
                 existingCity.data[existingTypeIndex] = { ...existingCity.data[existingTypeIndex], ...newData };
