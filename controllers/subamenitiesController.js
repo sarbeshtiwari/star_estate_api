@@ -107,13 +107,14 @@ exports.updateSubAmenity = async (req, res) => {
             return res.status(404).json({ success: false, message: "Sub-amenity not found" });
         }
 
-        updates.forEach((update, index) => {
-            if (req.files[index]) {
-                update.image = req.files[index].filename;
-            }
-        });
+        // updates.forEach((update, index) => {
+        //     if (req.files[index]) {
+        //         update.image = req.files[index].filename;
+        //     }
+        // });
 
-        await SubAmenityModel.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+        // await SubAmenityModel.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+        await SubAmenityModel.findByIdAndUpdate(id, updates, { new: true});
         res.json({ success: true, message: "Data updated successfully" });
     } catch (err) {
         console.error('Error:', err);
