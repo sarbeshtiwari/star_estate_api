@@ -98,33 +98,24 @@ exports.deleteSubAmenity = async (req, res) => {
 };
 
 exports.updateSubAmenity = async (req, res) => {
-    const { id } = req.params; // Extract ID from URL parameters
-    const amenityData = JSON.parse(req.body.data); // Parse the amenity data from the request body
+    const { id } = req.params;
+    const { amenityArray } = req.body;
 
-    if (!amenityData || typeof amenityData !== 'object') {
-        return res.status(400).json({ success: false, message: "Request body must be an object representing an Amenity" });
+    if (!Array.isArray(amenityArray)) {
+        return res.status(400).json({ success: false, message: "Request body must be an array" });
     }
 
-    // Exclude `_id` from update data
-    const { _id, ...updateData } = amenityData;
-
     try {
-        // Handle file uploads if provided
-        if (req.files && req.files.image) {
-            updateData.image = req.files.image[0].filename; // Assuming single file upload for `image`
+        const results = [];
+        for (const amenity of amenityArray) {
+            const updatedAmenity = await SubAmenityModel.findByIdAndUpdate(amenity._id, amenity, { new: true });
+            if (updatedAmenity) results.push(updatedAmenity);
         }
-
-        // Update the document with the new data
-        const updatedAmenity = await SubAmenityModel.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
-
-        if (!updatedAmenity) {
-            return res.status(404).json({ success: false, message: "Sub-amenity not found" });
-        }
-
-        res.json({ success: true, message: "Data updated successfully", updatedAmenity });
+        if (results.length === 0) return res.status(404).json({ success: false, message: "Amenity not found" });
+        res.json({ success: true, message: "Amenity updated successfully", updatedAmenity: results });
     } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
+        console.error(err);
+        res.status(500).send("Internal Server Error");
     }
 };
 
