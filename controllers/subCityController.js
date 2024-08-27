@@ -124,92 +124,46 @@ exports.deleteSubCity = async (req, res) => {
 
 
 
-exports.updateSubCity = async (req, res) => {
-    const { subCityId, content_type } = req.params;
-    const { city, sub_city, priority, status, data } = req.body;
-    const file = req.file;
-
-    try {
-        // Parse and validate data
-        const parsedData = JSON.parse(data);
-        if (!Array.isArray(parsedData)) {
-            return res.status(400).json({ success: false, message: "Data must be an array" });
-        }
-
-        // Prepare updated data
-        const imagePath = file ? file.path : null;
-        const updatedData = parsedData.map(item => ({
-            ...item,
-            image: imagePath || item.image
-        }));
-
-        // Find the existing sub-city
-        const existingSubCity = await SubCity.findOne({ sub_city: subCityId });
-
-        if (!existingSubCity) {
-            return res.status(404).json({ success: false, message: "Sub City not found" });
-        }
-
-        // Create a map from the updated data for quick lookup
-        const updatedDataMap = new Map(updatedData.map(item => [item.content_type, item]));
-
-        // Update existing data or add new data
-        existingSubCity.data = existingSubCity.data.map(item =>
-            updatedDataMap.has(item.content_type)
-                ? { ...item, ...updatedDataMap.get(item.content_type) }
-                : item
-        );
-
-        // Add new data that was not previously present
-        existingSubCity.data.push(...updatedData.filter(item => !existingSubCity.data.some(existingItem => existingItem.content_type === item.content_type)));
-
-        // Save the sub-city
-        await existingSubCity.save();
-        res.json({ success: true, message: "Sub City updated successfully" });
-    } catch (err) {
-        console.error('Error:', err);
-        res.status(500).send("Internal Server Error");
-    }
-};
-
-
 // exports.updateSubCity = async (req, res) => {
 //     const { subCityId, content_type } = req.params;
 //     const { city, sub_city, priority, status, data } = req.body;
 //     const file = req.file;
 
-//     let parsedData;
-
 //     try {
-//         parsedData = JSON.parse(data);
-
+//         // Parse and validate data
+//         const parsedData = JSON.parse(data);
 //         if (!Array.isArray(parsedData)) {
 //             return res.status(400).json({ success: false, message: "Data must be an array" });
 //         }
 
+//         // Prepare updated data
 //         const imagePath = file ? file.path : null;
 //         const updatedData = parsedData.map(item => ({
 //             ...item,
 //             image: imagePath || item.image
 //         }));
 
+//         // Find the existing sub-city
 //         const existingSubCity = await SubCity.findOne({ sub_city: subCityId });
 
 //         if (!existingSubCity) {
 //             return res.status(404).json({ success: false, message: "Sub City not found" });
 //         }
 
-//         const existingTypeIndex = existingSubCity.data.findIndex(item => item.content_type === content_type);
+//         // Create a map from the updated data for quick lookup
+//         const updatedDataMap = new Map(updatedData.map(item => [item.content_type, item]));
 
-//         if (existingTypeIndex !== -1) {
-//             const newData = updatedData.find(item => item.content_type === content_type);
-//             if (newData) {
-//                 existingSubCity.data[existingTypeIndex] = { ...existingSubCity.data[existingTypeIndex], ...newData };
-//             }
-//         } else {
-//             existingSubCity.data.push(...updatedData);
-//         }
+//         // Update existing data or add new data
+//         existingSubCity.data = existingSubCity.data.map(item =>
+//             updatedDataMap.has(item.content_type)
+//                 ? { ...item, ...updatedDataMap.get(item.content_type) }
+//                 : item
+//         );
 
+//         // Add new data that was not previously present
+//         existingSubCity.data.push(...updatedData.filter(item => !existingSubCity.data.some(existingItem => existingItem.content_type === item.content_type)));
+
+//         // Save the sub-city
 //         await existingSubCity.save();
 //         res.json({ success: true, message: "Sub City updated successfully" });
 //     } catch (err) {
@@ -217,5 +171,51 @@ exports.updateSubCity = async (req, res) => {
 //         res.status(500).send("Internal Server Error");
 //     }
 // };
+
+
+exports.updateSubCity = async (req, res) => {
+    const { subCityId, content_type } = req.params;
+    const { city, sub_city, priority, status, data } = req.body;
+    const file = req.file;
+
+    let parsedData;
+
+    try {
+        parsedData = JSON.parse(data);
+
+        if (!Array.isArray(parsedData)) {
+            return res.status(400).json({ success: false, message: "Data must be an array" });
+        }
+
+        const imagePath = file ? file.path : null;
+        const updatedData = parsedData.map(item => ({
+            ...item,
+            image: imagePath || item.image
+        }));
+
+        const existingSubCity = await SubCity.findOne({ sub_city: subCityId });
+
+        if (!existingSubCity) {
+            return res.status(404).json({ success: false, message: "Sub City not found" });
+        }
+
+        const existingTypeIndex = existingSubCity.data.findIndex(item => item.content_type === content_type);
+
+        if (existingTypeIndex !== -1) {
+            const newData = updatedData.find(item => item.content_type === content_type);
+            if (newData) {
+                existingSubCity.data[existingTypeIndex] = { ...existingSubCity.data[existingTypeIndex], ...newData };
+            }
+        } else {
+            existingSubCity.data.push(...updatedData);
+        }
+
+        await existingSubCity.save();
+        res.json({ success: true, message: "Sub City updated successfully" });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send("Internal Server Error");
+    }
+};
 
 
