@@ -98,41 +98,33 @@ exports.deleteSubAmenity = async (req, res) => {
 };
 
 exports.updateSubAmenity = async (req, res) => {
-    const { id } = req.params;
-    const updates = JSON.parse(req.body.data); // Parse JSON data from the request body
+    const { id } = req.params; // Get the ID from the URL parameters
+    const amenityData = JSON.parse(req.body.data); // Parse the amenity data from the request body
+
+    if (!amenityData || typeof amenityData !== 'object') {
+        return res.status(400).json({ success: false, message: "Request body must be an object representing an Amenity" });
+    }
 
     try {
-        // Find the existing document
-        const existingSubAmenity = await SubAmenityModel.findById(id);
-        if (!existingSubAmenity) {
+        // Handle file uploads if provided
+        if (req.files && req.files.image) {
+            amenityData.image = req.files.image[0].filename; // Assuming single file upload for `image`
+        }
+
+        // Update the document with the new data
+        const updatedAmenity = await SubAmenityModel.findByIdAndUpdate(id, amenityData, { new: true, runValidators: true });
+
+        if (!updatedAmenity) {
             return res.status(404).json({ success: false, message: "Sub-amenity not found" });
         }
 
-        // Handle file uploads if provided
-        // Uncomment and adjust if you are handling files
-        /*
-        if (req.files) {
-            updates.forEach((update, index) => {
-                if (req.files[index]) {
-                    update.image = req.files[index].filename;
-                }
-            });
-        }
-        */
-
-        // Update the document with the new data
-        const updatedSubAmenity = await SubAmenityModel.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
-
-        if (!updatedSubAmenity) {
-            return res.status(404).json({ success: false, message: "Failed to update Sub-amenity" });
-        }
-
-        res.json({ success: true, message: "Data updated successfully", updatedSubAmenity });
+        res.json({ success: true, message: "Data updated successfully", updatedAmenity });
     } catch (err) {
         console.error('Error:', err);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
 
 
 // exports.updateSubAmenity = async (req, res) => {
