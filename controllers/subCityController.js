@@ -196,9 +196,11 @@ exports.updateSubCity = async (req, res) => {
         console.log(updatedData);
 
         const existingSubCity = await SubCity.findOne({ sub_city: subCityId });
+        console.log(subCityId);
         console.log(existingSubCity);
 
         if (!existingSubCity) {
+            console.log('not found');
             return res.status(404).json({ success: false, message: "Sub City not found" });
         }
 
