@@ -83,9 +83,9 @@ exports.updateNews = async (req, res) => {
     const newsId = req.params.id;
     const updateData = req.body;
 
-    if (!req.files || !req.files.newsThumb || !req.files.newsImage) {
-        return res.status(400).json({ success: false, message: 'No files uploaded' });
-    }
+    // if (!req.files || !req.files.newsThumb || !req.files.newsImage) {
+    //     return res.status(400).json({ success: false, message: 'No files uploaded' });
+    // }
 
     try {
         const updatedNews = await NewsModel.findByIdAndUpdate(newsId, updateData, { new: true });
