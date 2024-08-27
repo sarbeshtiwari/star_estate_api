@@ -126,44 +126,40 @@ exports.updateCity = async (req, res) => {
     const { location, state, priority, status, data } = req.body;
     const file = req.file;
 
-    let parsedData;
-
     try {
-        console.log('tried');
-        parsedData = JSON.parse(data);
-
+        // Parse and validate data
+        const parsedData = JSON.parse(data);
         if (!Array.isArray(parsedData)) {
             return res.status(400).json({ success: false, message: "Data must be an array" });
         }
 
+        // Prepare updated data
         const imagePath = file ? file.path : null;
         const updatedData = parsedData.map(item => ({
             ...item,
             image: imagePath || item.image
         }));
-        console.log(updatedData);
 
+        // Find the existing city
         const existingCity = await City.findOne({ location: cityId });
 
         if (!existingCity) {
             return res.status(404).json({ success: false, message: "City not found" });
         }
 
-        const existingTypeIndex = existingCity.data.findIndex(item => item.location_type === location_type);
-        console.log(existingTypeIndex);
+        // Update or add new data
+        const updatedDataMap = new Map(updatedData.map(item => [item.location_type, item]));
 
-        if (existingTypeIndex !== -1) {
-            const newData = updatedData.find(item => item.location_type === location_type);
-            console.log(newData)
-            if (newData) {
-                console.log('newData')
-                existingCity.data[existingTypeIndex] = { ...existingCity.data[existingTypeIndex], ...newData };
-            }
-        } else {
-            console.log('ExistingData')
-            existingCity.data.push(...updatedData);
-        }
+        existingCity.data = existingCity.data.map(item =>
+            updatedDataMap.has(item.location_type)
+                ? { ...item, ...updatedDataMap.get(item.location_type) }
+                : item
+        );
 
+        // Add new data that was not previously present
+        existingCity.data.push(...updatedData.filter(item => !existingCity.data.some(existingItem => existingItem.location_type === item.location_type)));
+
+        // Save the city
         await existingCity.save();
         res.json({ success: true, message: "City updated successfully" });
     } catch (err) {
@@ -171,3 +167,56 @@ exports.updateCity = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
+
+
+// exports.updateCity = async (req, res) => {
+//     const { cityId, location_type } = req.params;
+//     const { location, state, priority, status, data } = req.body;
+//     const file = req.file;
+
+//     let parsedData;
+
+//     try {
+//         console.log('tried');
+//         parsedData = JSON.parse(data);
+
+//         if (!Array.isArray(parsedData)) {
+//             return res.status(400).json({ success: false, message: "Data must be an array" });
+//         }
+
+//         const imagePath = file ? file.path : null;
+//         const updatedData = parsedData.map(item => ({
+//             ...item,
+//             image: imagePath || item.image
+//         }));
+//         console.log(updatedData);
+
+//         const existingCity = await City.findOne({ location: cityId });
+
+//         if (!existingCity) {
+//             return res.status(404).json({ success: false, message: "City not found" });
+//         }
+
+//         const existingTypeIndex = existingCity.data.findIndex(item => item.location_type === location_type);
+//         console.log(existingTypeIndex);
+
+//         if (existingTypeIndex !== -1) {
+//             const newData = updatedData.find(item => item.location_type === location_type);
+//             console.log(newData)
+//             if (newData) {
+//                 console.log('newData')
+//                 existingCity.data[existingTypeIndex] = { ...existingCity.data[existingTypeIndex], ...newData };
+//             }
+//         } else {
+//             console.log('ExistingData')
+//             existingCity.data.push(...updatedData);
+//         }
+
+//         await existingCity.save();
+//         res.json({ success: true, message: "City updated successfully" });
+//     } catch (err) {
+//         console.error('Error:', err);
+//         res.status(500).send("Internal Server Error");
+//     }
+// };
