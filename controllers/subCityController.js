@@ -48,11 +48,11 @@ exports.getSubCities = async (req, res) => {
 };
 
 exports.getSubCityByCityAndType = async (req, res) => {
-    const { city, content_type } = req.params;
+    const { sub_city, content_type } = req.params;
 
     try {
         const subCity = await SubCity.find({
-            city: city,
+            sub_city: sub_city,
             'data.content_type': content_type
         });
 
