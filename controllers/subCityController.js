@@ -73,7 +73,7 @@ exports.getSubCityByID = async (req, res) => {
     try {
         const subCity = await SubCity.find({city: id}).then(sub_cities => {
             if (sub_cities.length === 0) {
-                return res.status(404).json({ error: 'No sub cities found for this city ID' });
+                return res.status(404).json({ success: false, error: 'No sub cities found for this city ID' });
             }
             res.json(sub_cities);
         })
