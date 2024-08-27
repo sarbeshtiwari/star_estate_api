@@ -98,21 +98,24 @@ exports.deleteSubAmenity = async (req, res) => {
 };
 
 exports.updateSubAmenity = async (req, res) => {
-    const { id } = req.params; // Get the ID from the URL parameters
+    const { id } = req.params; // Extract ID from URL parameters
     const amenityData = JSON.parse(req.body.data); // Parse the amenity data from the request body
 
     if (!amenityData || typeof amenityData !== 'object') {
         return res.status(400).json({ success: false, message: "Request body must be an object representing an Amenity" });
     }
 
+    // Exclude `_id` from update data
+    const { _id, ...updateData } = amenityData;
+
     try {
         // Handle file uploads if provided
         if (req.files && req.files.image) {
-            amenityData.image = req.files.image[0].filename; // Assuming single file upload for `image`
+            updateData.image = req.files.image[0].filename; // Assuming single file upload for `image`
         }
 
         // Update the document with the new data
-        const updatedAmenity = await SubAmenityModel.findByIdAndUpdate(id, amenityData, { new: true, runValidators: true });
+        const updatedAmenity = await SubAmenityModel.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
 
         if (!updatedAmenity) {
             return res.status(404).json({ success: false, message: "Sub-amenity not found" });
@@ -124,6 +127,7 @@ exports.updateSubAmenity = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
 
 
 
