@@ -129,6 +129,7 @@ exports.updateCity = async (req, res) => {
     let parsedData;
 
     try {
+        console.log('tried');
         parsedData = JSON.parse(data);
 
         if (!Array.isArray(parsedData)) {
@@ -140,6 +141,7 @@ exports.updateCity = async (req, res) => {
             ...item,
             image: imagePath || item.image
         }));
+        console.log(updatedData);
 
         const existingCity = await City.findOne({ location: cityId });
 
@@ -148,13 +150,16 @@ exports.updateCity = async (req, res) => {
         }
 
         const existingTypeIndex = existingCity.data.findIndex(item => item.location_type === location_type);
+        console.log(existingTypeIndex);
 
         if (existingTypeIndex !== -1) {
             const newData = updatedData.find(item => item.location_type === location_type);
             if (newData) {
+                console.log('newData')
                 existingCity.data[existingTypeIndex] = { ...existingCity.data[existingTypeIndex], ...newData };
             }
         } else {
+            console.log('ExistingData')
             existingCity.data.push(...updatedData);
         }
 
