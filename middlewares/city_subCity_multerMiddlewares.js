@@ -82,7 +82,7 @@ const storageCity = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'star_estate/city',
-        allowed_formats: ['jpg', 'png', 'jpeg'],
+        allowed_formats: ['jpg', 'png', 'jpeg', '.webp'],
         public_id: (req, file) => sanitizeFilename(file.originalname.split('.')[0]), // Sanitize filename without extension
     },
 });
@@ -92,7 +92,7 @@ const storageSubCity = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'star_estate/subcity',
-        allowed_formats: ['jpg', 'png', 'jpeg'],
+        allowed_formats: ['jpg', 'png', 'jpeg', '.webp'],
         public_id: (req, file) => sanitizeFilename(file.originalname.split('.')[0]), // Sanitize filename without extension
     },
 });

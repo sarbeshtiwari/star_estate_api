@@ -12,7 +12,7 @@ exports.uploadEventImages = async (req, res) => {
     }
 
     try {
-        const imagePaths = files.map(file => path.join('uploads', 'events', 'gallery', file.filename));
+        const imagePaths = files.map(file => file.filename);
 
         const imageDocuments = imagePaths.map(imagePath => ({
             eventId: id,
