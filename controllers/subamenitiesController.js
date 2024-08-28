@@ -107,8 +107,10 @@ exports.updateSubAmenity = async (req, res) => {
         }
 
         const existingupdateSubAmenity = await SubAmenityModel.findById(id);
+        consloe.log(existingupdateSubAmenity)
 
         if (!existingupdateSubAmenity) {
+            
             return res.status(404).json({ success: false, message: "Data not found" });
         }
 
@@ -117,8 +119,10 @@ exports.updateSubAmenity = async (req, res) => {
                 update.image = req.files[index].filename;
             }
         });
+        console.log('done')
 
         for (const update of updates) {
+            console.log(running')
             await SubAmenityModel.findByIdAndUpdate(id, update, { new: true, runValidators: true });
         }
 
