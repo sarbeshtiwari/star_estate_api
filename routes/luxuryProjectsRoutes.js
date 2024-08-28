@@ -5,8 +5,8 @@ const LuxuryProjectsController = require('../controllers/luxuryProjectsControlle
 // Routes
 router.post('/addLuxuryProjects', LuxuryProjectsController.createLuxuryProjects);
 router.get('/getLuxuryProjects', LuxuryProjectsController.getLuxuryProjects);
-router.get('/deleteLuxuryProjects/:id', LuxuryProjectsController.deleteLuxuryProjects);
-router.get('/updateLuxuryProjects/:id', LuxuryProjectsController.updateLuxuryProjects);
+router.delete('/deleteLuxuryProjects/:id', LuxuryProjectsController.deleteLuxuryProjects);
+router.put('/updateLuxuryProjects/:id', LuxuryProjectsController.updateLuxuryProjects);
 
 
 module.exports = router;

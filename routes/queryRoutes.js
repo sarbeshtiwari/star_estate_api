@@ -5,8 +5,8 @@ const queryController = require('../controllers/queryController');
 // Routes
 router.post('/addQuery', queryController.createQuery);
 router.get('/getQuery', queryController.getQuery);
-router.get('/deleteQuery/:id', queryController.deleteQuery);
-router.get('/updateQuery/:id', queryController.updateQuery);
+router.delete('/deleteQuery/:id', queryController.deleteQuery);
+router.put('/updateQuery/:id', queryController.updateQuery);
 
 
 module.exports = router;

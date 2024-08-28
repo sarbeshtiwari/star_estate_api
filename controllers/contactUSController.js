@@ -48,7 +48,7 @@ exports.getContactUS = async (req, res) => {
 };
 
 // Update a ContactUS by ID
-exports.updateQuery = async (req, res) => {
+exports.updateContactUS = async (req, res) => {
     const Id = req.params.id;
     const { note } = req.body;
 
@@ -60,7 +60,7 @@ exports.updateQuery = async (req, res) => {
             { new: true, upsert: true } // upsert creates a new document if one doesn't exist
         );
 
-        res.json({ success: true, message: "Query updated successfully", updatedQuery });
+        res.json({ success: true, message: "Contact US updated successfully", updatedQuery });
     } catch (err) {
         console.error("Update Error:", err);
         res.status(500).json({ success: false, message: "Internal Server Error" });
