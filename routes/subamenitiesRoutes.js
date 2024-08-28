@@ -10,6 +10,6 @@ router.get('/getSubAmenityByID/:id', subAmenityController.getSubAmenityById);
 router.get('/getAllTheAmenities', subAmenityController.getAllSubAmenities);
 router.put('/updateSubAmenitiyCategoryStatus/:id', subAmenityController.updateSubAmenityStatus);
 router.delete('/deleteSubAmenitiyCategory/:id', subAmenityController.deleteSubAmenity);
-router.put('/updateSubAmenities/:id', upload.single('image'), subAmenityController.updateSubAmenity);
+router.put('/updateSubAmenities/:id', upload.array('image', 10), subAmenityController.updateSubAmenity);
 
 module.exports = router;
