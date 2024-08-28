@@ -122,7 +122,7 @@ exports.updateSubAmenity = async (req, res) => {
         console.log('done')
 
         for (const update of updates) {
-            console.log(running')
+            console.log('running')
             await SubAmenityModel.findByIdAndUpdate(id, update, { new: true, runValidators: true });
         }
 
