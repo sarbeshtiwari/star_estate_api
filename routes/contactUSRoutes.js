@@ -7,3 +7,6 @@ router.post('/addContactUS', contactUSController.createContactUS);
 router.get('/getContactUS', contactUSController.getContactUS);
 router.get('deleteContactUS', contactUSController.deleteContactUS);
 router.get('/updateContactUS/:id', contactUSController.updateContactUS);
+
+
+module.exports = router;
