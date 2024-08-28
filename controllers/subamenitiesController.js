@@ -107,7 +107,7 @@ exports.updateSubAmenity = async (req, res) => {
         }
 
         const existingupdateSubAmenity = await SubAmenityModel.findById(id);
-        consloe.log(existingupdateSubAmenity)
+        console.log(existingupdateSubAmenity)
 
         if (!existingupdateSubAmenity) {
             
