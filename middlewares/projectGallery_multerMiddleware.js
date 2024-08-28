@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'star_estate/project_gallery',
-        allowed_formats: ['jpg', 'png', 'jpeg', '.webp'],
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
         public_id: (req, file) => sanitizeFilename(file.originalname.split('.')[0]), // Sanitize filename without extension
     },
 });
