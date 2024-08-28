@@ -1,6 +1,5 @@
 const ProjectsRera = require('../../models/dashboard/projectReraModel');
-const fs = require('fs');
-const path = require('path');
+const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
 
 // Add Project Rera
 exports.addProjectRera = async (req, res) => {
@@ -103,6 +102,11 @@ exports.deleteProjectRera = async (req, res) => {
 
         if (!deletedData) {
             return res.status(404).json({ success: false, message: "Data not found" });
+        }
+        if (deletedData.image) {
+            
+            await deleteFromCloudinary(deletedData.image);
+           
         }
 
         res.json({ success: true, message: "Data deleted successfully", deletedData });

@@ -1,4 +1,5 @@
 const SubCity = require('../models/subCityModel');
+const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
 exports.addSubCity = async (req, res) => {
     const { city, sub_city, priority, status, data } = req.body;
@@ -116,6 +117,11 @@ exports.deleteSubCity = async (req, res) => {
 
         if (!deletedSubCity) {
             return res.status(404).json({ success: false, message: "Sub City not found" });
+        }
+        if (deletedSubCity.data.image) {
+            
+            await deleteFromCloudinary(deletedSubCity.data.image);
+           
         }
 
         res.json({ success: true, message: "Sub City deleted successfully", deletedSubCity });

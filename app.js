@@ -41,10 +41,11 @@ const protectedRoutes = require('./routes/auth/protectedRoutes');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
-
+const port = process.env.PORT || 1000;
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); // Enable CORS for all routes
 app.use('/uploads', express.static('uploads'));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Connect to MongoDB
 dbConfig.connect();
@@ -95,8 +96,11 @@ app.use('/protected', protectedRoutes);
 
 app.use(errorHandler);
 
-app.listen(1000, () => {
-    console.log("Server is running on port 1000");
-});
+const server = app.listen(port, () => {
+    const address = server.address();
+    const host = address.address === '::' ? 'localhost' : address.address;
+    const url = `http://${host}:${address.port}`;
+    console.log(`Server running at ${url}`);
+  });
 
 module.exports = app;

@@ -1,5 +1,6 @@
 const NewsModel = require('../models/newsModel');
 const moment = require('moment');
+const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
 exports.addNews = async (req, res) => {
     const {
@@ -197,11 +198,10 @@ exports.deleteNews = async (req, res) => {
         }
 
         if (news.newsThumb || news.newsImage) {
-            const thumbPath = path.join(__dirname, '..', 'uploads', 'news', news.newsThumb);
-            const imagePath = path.join(__dirname, '..', 'uploads', 'news', news.newsImage);
+            await deleteFromCloudinary(news.newsThumb);
+            await deleteFromCloudinary(news.newsImage);
 
-            if (fs.existsSync(thumbPath)) fs.unlinkSync(thumbPath);
-            if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+          
         }
 
         const deletedNews = await NewsModel.findByIdAndDelete(id);

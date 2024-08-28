@@ -1,6 +1,7 @@
 const ImageModel = require('../models/imageModel');
 const path = require('path');
 const fs = require('fs');
+const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
 exports.uploadEventImages = async (req, res) => {
     const { id } = req.params;
@@ -68,10 +69,7 @@ exports.deleteImage = async (req, res) => {
         }
 
         if (image.imagePath) {
-            const imagePath = path.join(__dirname, '..', 'uploads', 'events', 'gallery', image.imagePath);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+            await deleteFromCloudinary(image.imagePath);
         }
 
         await ImageModel.findByIdAndDelete(id);

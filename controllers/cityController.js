@@ -113,6 +113,11 @@ exports.deleteCity = async (req, res) => {
         if (!deletedCity) {
             return res.status(404).json({ success: false, message: "City not found" });
         }
+        if (deletedCity.data.image) {
+            
+            await deleteFromCloudinary(deletedCity.data.image);
+           
+        }
 
         res.json({ success: true, message: "City deleted successfully", deletedCity });
     } catch (err) {

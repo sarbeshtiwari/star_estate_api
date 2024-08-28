@@ -1,6 +1,7 @@
 const LocationAdvantage = require('../models/locationAdvantageModel');
 const path = require('path');
 const fs = require('fs');
+const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image')
 
 // Helper function to ensure upload directory exists
 const ensureUploadDir = (dir) => {
@@ -89,6 +90,11 @@ exports.deleteLocationAdvantage = async (req, res) => {
         const deletedLocationAdvantage = await LocationAdvantage.findByIdAndDelete(req.params.id);
         if (!deletedLocationAdvantage) {
             return res.status(404).json({ success: false, message: "Data not found" });
+        }
+        if (deletedLocationAdvantage.image) {
+            
+            await deleteFromCloudinary(deletedLocationAdvantage.image);
+           
         }
         res.json({ success: true, message: "Data deleted successfully", deletedLocationAdvantage });
     } catch (err) {

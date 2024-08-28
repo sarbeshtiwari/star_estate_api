@@ -1,6 +1,12 @@
 const Project = require('../../models/dashboard/addProjectModel');
 const fs = require('fs');
 const path = require('path');
+const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
+
+
+
+
+
 
 exports.addProject = async (req, res) => {
     try {
@@ -133,10 +139,11 @@ exports.deleteProject = async (req, res) => {
             return res.status(404).json({ success: false, message: "Project not found" });
         }
         if (project.project_logo) {
-            const imagePath = path.join(__dirname, '../uploads/projects', project.project_logo);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+            // const imagePath = path.join(__dirname, '../uploads/projects', project.project_logo);
+            await deleteFromCloudinary(project.project_logo);
+            // if (fs.existsSync(imagePath)) {
+            //     fs.unlinkSync(imagePath);
+            // }
         }
         await Project.findByIdAndDelete(req.params.id);
         res.json({ success: true, message: "Project and associated image deleted successfully" });

@@ -10,7 +10,7 @@ exports.createLuxuryProjects = async (req, res) => {
         projectName,
         user_query,
         created_at, 
-        note, 
+        note,
     } = req.body;
 
     if (!Name || !phoneNumber || !user_query) {
@@ -29,7 +29,7 @@ exports.createLuxuryProjects = async (req, res) => {
         });
 
         await newQuery.save();
-        res.json({ success: true, message: "Query added successfully" });
+        res.json({ success: true, message: "Data added successfully" });
     } catch (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
@@ -79,7 +79,7 @@ exports.deleteLuxuryProjects = async (req, res) => {
         }
 
         await LuxuryProjectsModel.findByIdAndDelete(id);
-        res.json({ success: true, message: "Query deleted successfully" });
+        res.json({ success: true, message: "Data deleted successfully" });
     } catch (err) {
         console.error("Delete Error:", err);
         res.status(500).send("Internal Server Error");

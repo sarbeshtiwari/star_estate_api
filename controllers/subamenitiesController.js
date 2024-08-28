@@ -1,3 +1,4 @@
+const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 const SubAmenityModel = require('../models/subAmenitiesModel');
 
 exports.addSubAmenity = async (req, res) => {
@@ -89,6 +90,9 @@ exports.deleteSubAmenity = async (req, res) => {
         const deletedSubAmenity = await SubAmenityModel.findByIdAndDelete(id);
         if (!deletedSubAmenity) {
             return res.status(404).json({ success: false, message: "Sub-amenity not found" });
+        }
+        if (deletedSubAmenity.image){
+            await deleteFromCloudinary(deletedSubAmenity.image);
         }
         res.json({ success: true, message: "Sub-amenity deleted successfully", deletedSubAmenity });
     } catch (err) {

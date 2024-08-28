@@ -1,3 +1,4 @@
+const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
 const FloorPlanModel = require('../../models/dashboard/projectFloorPlanModel');
 
 exports.addFloorPlan = async (req, res) => {
@@ -98,6 +99,11 @@ exports.deleteFloorPlan = async (req, res) => {
 
         if (!deletedFloorPlan) {
             return res.status(404).json({ success: false, message: "Data not found" });
+        }
+        if (deletedFloorPlan.image) {
+            
+            await deleteFromCloudinary(deletedFloorPlan.image);
+           
         }
 
         res.json({ success: true, message: "Data deleted successfully", deletedFloorPlan });

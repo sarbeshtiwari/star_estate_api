@@ -1,6 +1,7 @@
 const UserModel = require('../../models/dashboard/projectBrochureWalkthroughModel');
 const path = require('path');
 const fs = require('fs');
+const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
 
 // Add Brochure and Walkthrough
 exports.addBrochureWalkthrough = async (req, res) => {
@@ -91,10 +92,8 @@ exports.deleteBrochureWalkthrough = async (req, res) => {
         }
 
         if (deletedBrochureWalkthrough.brochure) {
-            const imagePath = path.join(__dirname, '..', 'uploads', 'projects', 'brochure', deletedBrochureWalkthrough.brochure);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+            await deleteFromCloudinary(deletedBrochureWalkthrough.brochure);
+
         }
 
         res.json({ success: true, message: "Brochure_Walkthrough deleted successfully", deletedBrochureWalkthrough });

@@ -1,6 +1,7 @@
 const DeveloperModel = require('../models/developerModel');
 const path = require('path');
 const fs = require('fs');
+const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
 // Create and Save a New Developer
 exports.createDeveloper = async (req, res) => {
@@ -131,10 +132,7 @@ exports.deleteDeveloper = async (req, res) => {
         }
 
         if (developer.developerLogo) {
-            const imagePath = path.join(__dirname, '..', 'uploads', 'developers', developer.developerLogo);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+           await deleteFromCloudinary(developer.developerLogo);
         }
 
         await DeveloperModel.findByIdAndDelete(id);

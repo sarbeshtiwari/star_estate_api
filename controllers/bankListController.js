@@ -1,5 +1,6 @@
 // controllers/bankController.js
 const BanksList = require('../models/bankListModel');
+const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
 // Add new bank list
 exports.addBankList = async (req, res) => {
@@ -92,6 +93,11 @@ exports.deleteBankList = async (req, res) => {
 
         if (!deletedCategory) {
             return res.status(404).json({ success: false, message: "Data not found" });
+        }
+        if (deletedCategory.image) {
+            
+            await deleteFromCloudinary(deletedCategory.image);
+           
         }
 
         res.json({ success: true, message: "Data deleted successfully", deletedCategory });

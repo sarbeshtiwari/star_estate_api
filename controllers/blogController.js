@@ -2,6 +2,7 @@ const BlogModel = require('../models/blogModel');
 const path = require('path');
 const fs = require('fs');
 const moment = require('moment');
+const deleteFromCloudinery = require('../middlewares/delete_cloudinery_image');
 
 // Create and Save a New Blog
 exports.createBlog = async (req, res) => {
@@ -138,10 +139,7 @@ exports.deleteBlog = async (req, res) => {
         }
 
         if (blog.blogsImage) {
-            const imagePath = path.join(__dirname, '..', 'uploads', 'blogs', blog.blogsImage);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+            await deleteFromCloudinery(blog.blogsImage);
         }
 
         await BlogModel.findByIdAndDelete(id);

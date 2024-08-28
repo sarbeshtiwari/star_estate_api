@@ -2,6 +2,7 @@ const EventModel = require('../models/eventModel');
 const path = require('path');
 const fs = require('fs');
 const moment = require('moment');
+const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
 exports.createEvent = async (req, res) => {
     const {
@@ -120,10 +121,8 @@ exports.deleteEvent = async (req, res) => {
         }
 
         if (event.eventImage) {
-            const imagePath = path.join(__dirname, '..', 'uploads', 'events', event.eventImage);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+            await deleteFromCloudinary(event.eventImage);
+
         }
 
         await EventModel.findByIdAndDelete(id);
