@@ -54,16 +54,20 @@ exports.updateQuery = async (req, res) => {
     const { note } = req.body;
 
     try {
-        const updatedQuery = await QueryModel.findByIdAndUpdate(Id, note, { new: true });
-        if (!updatedQuery) {
-            return res.status(404).json({ success: false, message: "Query not found" });
-        }
+        // Use findByIdAndUpdate with upsert option to create a new document if it does not exist
+        const updatedQuery = await QueryModel.findByIdAndUpdate(
+            Id,
+            { $set: { note } }, // $set operator ensures only 'note' field is updated
+            { new: true, upsert: true } // upsert creates a new document if one doesn't exist
+        );
+
         res.json({ success: true, message: "Query updated successfully", updatedQuery });
     } catch (err) {
         console.error("Update Error:", err);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
+
 
 
 // Delete a Query
