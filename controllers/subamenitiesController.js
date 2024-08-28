@@ -98,8 +98,9 @@ exports.deleteSubAmenity = async (req, res) => {
 };
 
 exports.updateSubAmenity = async (req, res) => {
+    const { id } = req.params;
     try {
-        const { id, data } = req.body;
+        const {data } = req.body;
 
         if (!id) {
             return res.status(400).json({ success: false, message: "ID is required to update an entry" });
