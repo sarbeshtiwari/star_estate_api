@@ -31,6 +31,9 @@ const projectContentSEORoutes = require('./routes/dashboard/projectContentSEORou
 const projectBrochureWalkthroughRoutes = require('./routes/dashboard/projectBrochureWalkthroughRoutes');
 const cityRoutes = require('./routes/cityRoutes');
 const subCityRoutes = require('./routes/subCityRoutes');
+const userQueryRoutes = require('./routes/queryRoutes');
+const contactUS = require('./routes/contactUSRoutes');
+const luxuryProjects = require('./routes/luxuryProjectsRoutes');
 
 const authRoutes = require('./routes/auth/authRoutes');
 const protectedRoutes = require('./routes/auth/protectedRoutes');
@@ -74,6 +77,12 @@ app.use('/projectFloorPlan', projectFloorPlanRoutes);
 app.use('/projectFaq', projectfaqRoutes);
 app.use('/projectContentSEO', projectContentSEORoutes);
 app.use('/projectBrochureWalkthrough', projectBrochureWalkthroughRoutes);
+
+//enquiry
+
+app.use('/userQuery', userQueryRoutes);
+app.use('/contactUS', contactUS);
+app.use('/luxuryProjects', luxuryProjects);
 
 
 //auth
