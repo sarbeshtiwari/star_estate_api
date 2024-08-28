@@ -100,16 +100,20 @@ exports.deleteSubAmenity = async (req, res) => {
 exports.updateSubAmenity = async (req, res) => {
     const { id } = req.params;
     try {
-        const {data } = req.body;
+        const { data } = req.body;
 
         if (!id) {
             return res.status(400).json({ success: false, message: "ID is required to update an entry" });
         }
 
+        if (!data) {
+            return res.status(400).json({ success: false, message: "Data is required to update an entry" });
+        }
+
         const amenityData = JSON.parse(data);
 
-        if (typeof amenityData !== 'object') {
-            return res.status(400).json({ success: false, message: "Data must be an object representing a single Amenity" });
+        if (typeof amenityData !== 'object' || Array.isArray(amenityData)) {
+            return res.status(400).json({ success: false, message: "Data must be a valid object representing the Amenity" });
         }
 
         // Handle file upload if present
@@ -118,7 +122,7 @@ exports.updateSubAmenity = async (req, res) => {
         }
 
         // Find the amenity by ID and update it
-        const result = await SubAmenityModel.findByIdAndUpdate(id, amenityData, { new: true });
+        const result = await SubAmenityModel.findByIdAndUpdate(id, amenityData, { new: true, runValidators: true });
 
         if (!result) {
             return res.status(404).json({ success: false, message: "Amenity not found" });
@@ -130,6 +134,7 @@ exports.updateSubAmenity = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
 
 
 
