@@ -23,6 +23,7 @@ exports.createCareer = async (req, res) => {
     }
 
     try {
+        console.log('trying')
         const newCareer = new CareerModel({
             Name, 
             Email, 
@@ -35,8 +36,10 @@ exports.createCareer = async (req, res) => {
             created_at, 
             note, 
         });
+        console.log('sned')
 
         await sendCareerEmail(Name, Email, phoneNumber,  category, location);
+        console.log('done')
 
         await newCareer.save();
         res.json({ success: true, message: "Career added successfully" });

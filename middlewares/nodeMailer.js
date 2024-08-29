@@ -626,7 +626,7 @@ const sendCareerEmail = async (Name, Email, phoneNumber,  category, location) =>
             <div class="container">
                 <!-- Header -->
                 <div class="header">
-                    <img src="https://www.starestate.in/assets/images/homebanner/banner-new-4k.webp" style="max-width: 120px; alt="Company Logo">
+                    <img src="https://www.starestate.in/assets/images/logo-starestate.png" style="max-width: 120px; alt="Company Logo">
                     <div class="company-info">
                         <strong>Star Estate</strong><br>
                             Riana Aurum 4th floor,<br>
