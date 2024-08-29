@@ -131,38 +131,48 @@ exports.updateCity = async (req, res) => {
     const { location, state, priority, status, data } = req.body;
     const file = req.file;
 
+    let parsedData;
+
     try {
         // Parse and validate data
-        const parsedData = JSON.parse(data);
+        parsedData = JSON.parse(data);
         if (!Array.isArray(parsedData)) {
             return res.status(400).json({ success: false, message: "Data must be an array" });
         }
 
-        // Prepare updated data
-        const imagePath = file ? file.path : null;
-        const updatedData = parsedData.map(item => ({
-            ...item,
-            image: imagePath || item.image
-        }));
-
-        // Find the existing city
-        const existingCity = await City.findOne({ location: cityId });
+         const existingCity = await City.findOne({ location: cityId });
 
         if (!existingCity) {
             return res.status(404).json({ success: false, message: "City not found" });
         }
 
+        // Prepare updated data
+        const imagePath = file ? file.path : null;
+       
+        // const updatedData = parsedData.map(item => ({
+        //     ...item,
+        //     image: imagePath || item.image
+        // }));
+       
+
         // Update or add new data
-        const updatedDataMap = new Map(updatedData.map(item => [item.location_type, item]));
+        const updatedDataMap = new Map(parsedData.map(item => [item.location_type, item]));
 
         existingCity.data = existingCity.data.map(item =>
             updatedDataMap.has(item.location_type)
-                ? { ...item, ...updatedDataMap.get(item.location_type) }
+                ? { ...item, ...updatedDataMap.get(item.location_type),
+                  image: imagePath || item.image
+                  }
                 : item
         );
 
         // Add new data that was not previously present
-        existingCity.data.push(...updatedData.filter(item => !existingCity.data.some(existingItem => existingItem.location_type === item.location_type)));
+        existingCity.data.push(...parsedData.filter(item => !existingCity.data.some(existingItem => existingItem.location_type === item.location_type))
+                              .map(item => ({
+                                  ...item,
+                                  image: imagePath || item.image
+                              }))
+                              );
 
         // Save the city
         await existingCity.save();
