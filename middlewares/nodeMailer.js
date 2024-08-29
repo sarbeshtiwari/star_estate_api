@@ -246,7 +246,7 @@ const sendQueryEmail = async (Name, Email, phoneNumber, user_query) => {
                     </tr>
                     <tr>
                         <td><strong>Message:</strong></td>
-                        <td>${user_message}</td>
+                        <td>${user_query}</td>
                     </tr>
                 </table>
                 <p>Best regards,<br><img src="https://www.starestate.in/assets/images/logo-starestate.png" alt="Signature Image" style="max-width: 120px;"></p>
@@ -517,7 +517,7 @@ const sendLuxuryQueryEmail = async (Name, Email, phoneNumber, projectName, user_
                         </tr>
                       <tr>
                           <td><strong>Message:</strong></td>
-                          <td>${user_message}</td>
+                          <td>${user_query}</td>
                       </tr>
                   </table>
                   <p>Best regards,<br><img src="https://www.starestate.in/assets/images/logo-starestate.png" alt="Signature Image" style="max-width: 120px;"></p>
