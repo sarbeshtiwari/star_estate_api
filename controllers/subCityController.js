@@ -196,11 +196,11 @@ exports.updateSubCity = async (req, res) => {
             return res.status(400).json({ success: false, message: "Data must be an array" });
         }
 
-        if (req.file) {
-            imagePath = req.file.filename;
-        }
+        // if (req.file) {
+        //     imagePath = req.file.filename;
+        // }
 
-        // const imagePath = file ? file.path : null;
+        const imagePath = file ? file.path : req.file.filename;
         const updatedData = parsedData.map(item => ({
             ...item,
             image: imagePath || item.image
