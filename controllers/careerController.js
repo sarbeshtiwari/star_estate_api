@@ -1,6 +1,7 @@
 const CareerModel = require('../models/careerModel');
 const path = require('path');
 const fs = require('fs');
+const { sendCareerEmail } = require('../middlewares/nodeMailer');
 
 // Create and Save a New Career
 exports.createCareer = async (req, res) => {
@@ -8,7 +9,7 @@ exports.createCareer = async (req, res) => {
         Name, 
         Email, 
         phoneNumber, 
-        projectName, 
+      
         category,
         location,
         job_type,
@@ -26,7 +27,7 @@ exports.createCareer = async (req, res) => {
             Name, 
             Email, 
             phoneNumber, 
-            projectName, 
+            
             category,
             location,
             job_type,
@@ -34,6 +35,8 @@ exports.createCareer = async (req, res) => {
             created_at, 
             note, 
         });
+
+        await sendCareerEmail(Name, Email, phoneNumber,  category, location);
 
         await newCareer.save();
         res.json({ success: true, message: "Career added successfully" });

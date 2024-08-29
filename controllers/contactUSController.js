@@ -1,3 +1,4 @@
+const { sendQueryEmail } = require('../middlewares/nodeMailer');
 const ContactUSModel = require('../models/contactUSModel');
 
 
@@ -27,6 +28,8 @@ exports.createContactUS = async (req, res) => {
             created_at, 
             note, 
         });
+
+        await sendQueryEmail(Name, Email, phoneNumber, user_query)
 
         await newQuery.save();
         res.json({ success: true, message: "Query added successfully" });

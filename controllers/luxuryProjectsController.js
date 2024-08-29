@@ -1,3 +1,4 @@
+const { sendLuxuryQueryEmail } = require('../middlewares/nodeMailer');
 const LuxuryProjectsModel = require('../models/luxuryProjectsModel');
 
 
@@ -27,6 +28,8 @@ exports.createLuxuryProjects = async (req, res) => {
             created_at, 
             note, 
         });
+
+        await sendLuxuryQueryEmail(Name, Email, phoneNumber, projectName, user_query);
 
         await newQuery.save();
         res.json({ success: true, message: "Data added successfully" });
