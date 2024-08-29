@@ -213,19 +213,32 @@ exports.updateSubCity = async (req, res) => {
             return res.status(404).json({ success: false, message: "Sub City not found" });
         }
 
-        const existingTypeIndex = existingSubCity.data.findIndex(item => item.content_type === content_type);
-        console.log(existingTypeIndex)
+        // const existingTypeIndex = existingSubCity.data.findIndex(item => item.content_type === content_type);
+        // console.log(existingTypeIndex)
 
-        if (existingTypeIndex !== -1) {
-            const newData = updatedData.find(item => item.content_type === content_type);
-            if (newData) {
-                console.log(newData);
-                existingSubCity.data[existingTypeIndex] = { ...existingSubCity.data[existingTypeIndex], ...newData };
-            }
-        } else {
-            console.log('existing')
-            existingSubCity.data.push(...updatedData);
-        }
+        // if (existingTypeIndex !== -1) {
+        //     const newData = updatedData.find(item => item.content_type === content_type);
+        //     if (newData) {
+        //         console.log(newData);
+        //         existingSubCity.data[existingTypeIndex] = { ...existingSubCity.data[existingTypeIndex], ...newData };
+        //     }
+        // } else {
+        //     console.log('existing')
+        //     existingSubCity.data.push(...updatedData);
+        // }
+         // Update or add new data
+        const updatedDataMap = new Map(updatedData.map(item => [item.content_type, item]));
+
+        existingSubCity.data = existingSubCity.data.map(item =>
+            updatedDataMap.has(item.content_type)
+                ? { ...item, ...updatedDataMap.get(item.content_type) }
+                : item
+        );
+
+        // Add new data that was not previously present
+        existingSubCity.data.push(...updatedData.filter(item => !existingSubCity.data.some(existingItem => existingItem.content_type === item.content_type)));
+
+        // Save the city
 
         await existingSubCity.save();
         res.json({ success: true, message: "Sub City updated successfully" });
