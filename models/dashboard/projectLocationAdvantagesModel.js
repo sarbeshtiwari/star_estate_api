@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const UserDataSchema = new mongoose.Schema({
     LocationAdvantagesId: { type: String, required: true },
     title: { type: String, required: true },
-    proximity: { type: String, required: false },
+    proximity: { type: Number, required: false },
     unit: { type: String, required: false },
     status: { type: Boolean, required: true }
 });
