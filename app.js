@@ -41,7 +41,7 @@ const protectedRoutes = require('./routes/auth/protectedRoutes');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
-const port = process.env.PORT || 1000;
+const port = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); // Enable CORS for all routes
 app.use('/uploads', express.static('uploads'));
