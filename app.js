@@ -35,6 +35,7 @@ const userQueryRoutes = require('./routes/queryRoutes');
 const contactUS = require('./routes/contactUSRoutes');
 const luxuryProjects = require('./routes/luxuryProjectsRoutes');
 const careerQuery = require('./routes/careerRoutes');
+const cityConfigurationRoutes = require('./routes/projectConfigurationRoutes')
 
 const authRoutes = require('./routes/auth/authRoutes');
 const protectedRoutes = require('./routes/auth/protectedRoutes');
@@ -61,6 +62,7 @@ app.use('/developers', developerRoutes);
 app.use('/events', eventRoutes);
 app.use('/images', imageRoutes);
 app.use('/city', cityRoutes);
+app.use('/cityConfiguration', cityConfigurationRoutes);
 app.use('/faqs', faqRoutes);
 app.use('/subCity', subCityRoutes);
 app.use('/subCityFaqs', subCityFaqRoutes);

@@ -4,7 +4,16 @@ const path = require('path');
 const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
 
 
-
+// Utility function to create a URL slug
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
 
 
 
@@ -38,7 +47,7 @@ exports.addProject = async (req, res) => {
         } = req.body;
 
         if (!projectName || !projectAddress || !cityLocation || !projectLocality ||
-            !projectConfiguration || !projectBy || !projectType || !projectPrice ||
+            !projectConfiguration || !projectBy || !projectPrice ||
             !rera_no || !project_status.length || !property_type) {
             return res.status(400).json({ message: 'Required fields are missing' });
         }
@@ -48,8 +57,10 @@ exports.addProject = async (req, res) => {
             return res.json({ success: false, message: "Project name already found" });
         }
 
+        const slugURL = createSlug(projectName);
+
         const project = new Project({
-            ...req.body,
+            ...req.body, slugURL,
             project_logo: req.file ? req.file.path : null
         });
 

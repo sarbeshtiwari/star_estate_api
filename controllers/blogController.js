@@ -4,6 +4,17 @@ const fs = require('fs');
 const moment = require('moment');
 const deleteFromCloudinery = require('../middlewares/delete_cloudinery_image');
 
+
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
 // Create and Save a New Blog
 exports.createBlog = async (req, res) => {
     const {
@@ -30,6 +41,8 @@ exports.createBlog = async (req, res) => {
             return res.status(400).json({ success: false, message: "Blog Name already exists" });
         }
 
+        const slugURL = createSlug(blogsName);
+
         const newBlog = new BlogModel({
             metaTitle,
             metaKeyword,
@@ -42,6 +55,7 @@ exports.createBlog = async (req, res) => {
             blogsImage: req.file.filename,
             imageTitle,
             content,
+            slugURL,
             status
         });
 

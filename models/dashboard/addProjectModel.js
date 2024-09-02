@@ -10,7 +10,7 @@ const projectSchema = new mongoose.Schema({
     projectLocality: { type: String, required: true },
     projectConfiguration: { type: String, required: true },
     projectBy: { type: String, required: true },
-    projectType: { type: String, required: true },
+    // projectType: { type: String, required: true },
     projectPrice: { type: String, required: true },
     ivr_no: { type: String },
     locationMap: { type: String },
@@ -25,7 +25,8 @@ const projectSchema = new mongoose.Schema({
     project_status: { type: [String], required: true },
     status: { type: Boolean, default: false },
     project_logo: { type: String },
-    property_type: { type: String, required: true }
+    property_type: { type: String, required: true },
+    slugURL: {type: String, required: true}
 });
 
 const Project = mongoose.model("Project", projectSchema);
