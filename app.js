@@ -36,6 +36,8 @@ const contactUS = require('./routes/contactUSRoutes');
 const luxuryProjects = require('./routes/luxuryProjectsRoutes');
 const careerQuery = require('./routes/careerRoutes');
 const cityConfigurationRoutes = require('./routes/projectConfigurationRoutes')
+const bannerImageRoutes = require('./routes/bannerImage');
+
 
 const authRoutes = require('./routes/auth/authRoutes');
 const protectedRoutes = require('./routes/auth/protectedRoutes');
@@ -81,6 +83,8 @@ app.use('/projectFloorPlan', projectFloorPlanRoutes);
 app.use('/projectFaq', projectfaqRoutes);
 app.use('/projectContentSEO', projectContentSEORoutes);
 app.use('/projectBrochureWalkthrough', projectBrochureWalkthroughRoutes);
+
+app.use('/bannerImages', bannerImageRoutes);
 
 //enquiry
 
