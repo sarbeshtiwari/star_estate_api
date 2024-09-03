@@ -13,6 +13,7 @@ const CityDataSchema = new mongoose.Schema({
 
 const CitySchema = new mongoose.Schema({
     location: { type: String, required: true },
+    slugURL : {type: String, required: true},
     state: { type: String, required: true },
     priority: { type: String },
     status: { type: Boolean, default: false },

@@ -1,6 +1,16 @@
 const SubCity = require('../models/subCityModel');
 const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
 exports.addSubCity = async (req, res) => {
     const { city, sub_city, priority, status, data } = req.body;
     const file = req.file;
@@ -14,6 +24,8 @@ exports.addSubCity = async (req, res) => {
         return res.status(400).json({ success: false, message: "City, Sub City, and data are required" });
     }
 
+    const slugURL = createSlug(sub_city);
+
     try {
         const imagePath = file ? file.path : null;
 
@@ -24,9 +36,12 @@ exports.addSubCity = async (req, res) => {
 
         const newSubCity = new SubCity({
             city,
+            slugURL,
             sub_city,
+            
             priority,
             status,
+            
             data: updatedData
         });
 
@@ -54,7 +69,7 @@ exports.getSubCityByCityAndType = async (req, res) => {
 
     try {
         const subCity = await SubCity.find({
-            city: city,
+            slugURL: city,
             'data.content_type': content_type
         });
       

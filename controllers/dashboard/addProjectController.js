@@ -61,7 +61,10 @@ exports.addProject = async (req, res) => {
 
         const project = new Project({
             ...req.body, slugURL,
-            project_logo: req.file ? req.file.path : null
+            project_logo: req.files.project_logo[0].filename,
+            project_thumbnail: req.files.project_thumbnail[0].filename,
+            // project_logo: req.file ? req.file.path : null,
+            // project_thumbnail: req.file ? req.file.path : null
         });
 
         await project.save();

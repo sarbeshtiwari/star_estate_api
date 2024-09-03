@@ -1,18 +1,17 @@
 const UserModel = require('../../models/dashboard/projectBrochureWalkthroughModel');
-const path = require('path');
-const fs = require('fs');
-const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
+// const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
 
 // Add Brochure and Walkthrough
 exports.addBrochureWalkthrough = async (req, res) => {
     const { walkthrough, projectname, status } = req.body;
-    const brochure = req.file ? req.file.filename : null;
+    // const brochure = req.file ? req.file.filename : null;
 
     if (!walkthrough) {
         return res.status(400).json({ success: false, message: "Fill the required field" });
     }
 
-    const newReport = new UserModel({ walkthrough, brochure, projectname, status });
+    // const newReport = new UserModel({ walkthrough, brochure, projectname, status });
+    const newReport = new UserModel({ walkthrough, projectname, status });
 
     try {
         console.log("New Data:", newReport);
@@ -91,10 +90,10 @@ exports.deleteBrochureWalkthrough = async (req, res) => {
             return res.status(404).json({ success: false, message: "Brochure_Walkthrough not found" });
         }
 
-        if (deletedBrochureWalkthrough.brochure) {
-            await deleteFromCloudinary(deletedBrochureWalkthrough.brochure);
+        // if (deletedBrochureWalkthrough.brochure) {
+        //     await deleteFromCloudinary(deletedBrochureWalkthrough.brochure);
 
-        }
+        // }
 
         res.json({ success: true, message: "Brochure_Walkthrough deleted successfully", deletedBrochureWalkthrough });
     } catch (err) {
@@ -108,9 +107,9 @@ exports.updateBrochureWalkthrough = async (req, res) => {
     const { id } = req.params; 
     const updatedData = req.body;
 
-    if (req.file) {
-        updatedData.brochure = req.file.filename;
-    }
+    // if (req.file) {
+    //     updatedData.brochure = req.file.filename;
+    // }
 
     try {
         const updatedDocument = await UserModel.findByIdAndUpdate(id, updatedData, { new: true, runValidators: true });

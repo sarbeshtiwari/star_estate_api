@@ -1,5 +1,17 @@
 const UserModel = require('../models/categoryModel');
 
+
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
+
 // Add a category
 const addCategory = async (req, res) => {
     const { metaTitle, metaKeyword, metaDescription, category, content, status } = req.body;
@@ -8,6 +20,8 @@ const addCategory = async (req, res) => {
         return res.status(400).json({ success: false, message: "Category is required" });
     }
 
+    const slugURL = createSlug(category);
+
     try {
         const match = await UserModel.findOne({ category: category });
 
@@ -15,7 +29,7 @@ const addCategory = async (req, res) => {
             return res.json({ success: false, message: "Category already found" });
         }
 
-        const newCategory = new UserModel({ metaTitle, metaKeyword, metaDescription, category, content, status });
+        const newCategory = new UserModel({ metaTitle, metaKeyword, metaDescription, category, content, slugURL, status });
         await newCategory.save();
         res.json({ success: true, message: "Category added successfully" });
     } catch (err) {

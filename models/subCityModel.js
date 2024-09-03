@@ -13,6 +13,7 @@ const UserSchemaSubCity = new mongoose.Schema({
 
 const SubCitySchema = new mongoose.Schema({
     city: { type: String, required: true },
+    slugURL : {type: String, required: true},
     sub_city: { type: String, required: true },
     priority: { type: String },
     status: { type: Boolean, default: false },

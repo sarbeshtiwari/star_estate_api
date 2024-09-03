@@ -38,7 +38,9 @@ const careerQuery = require('./routes/careerRoutes');
 const cityConfigurationRoutes = require('./routes/projectConfigurationRoutes')
 const bannerImageRoutes = require('./routes/bannerImage');
 const starRera = require('./routes/starRera');
-
+const advertisement = require('./routes/advertisements')
+const awards = require('./routes/awards');
+const clientSpeak = require('./routes/clientSpeakRoutes');
 
 const authRoutes = require('./routes/auth/authRoutes');
 const protectedRoutes = require('./routes/auth/protectedRoutes');
@@ -87,6 +89,10 @@ app.use('/projectBrochureWalkthrough', projectBrochureWalkthroughRoutes);
 
 app.use('/bannerImages', bannerImageRoutes);
 app.use('/starRera', starRera);
+
+app.use('/advertisement', advertisement);
+app.use('/award', awards);
+app.use('/clientSpeak', clientSpeak);
 
 //enquiry
 

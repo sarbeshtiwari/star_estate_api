@@ -25,6 +25,7 @@ const projectSchema = new mongoose.Schema({
     project_status: { type: [String], required: true },
     status: { type: Boolean, default: false },
     project_logo: { type: String },
+    project_thumbnail: { type: String },
     property_type: { type: String, required: true },
     slugURL: {type: String, required: true}
 });

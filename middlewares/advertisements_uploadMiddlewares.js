@@ -1,10 +1,6 @@
-const path = require('path');
-const fs = require('fs');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('../config/im');
 const multer = require('multer');
-
-
 
 
 const sanitizeFilename = (filename) => {
@@ -18,7 +14,7 @@ const sanitizeFilename = (filename) => {
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'star_estate/projects',
+        folder: 'star_estate/advertisements',
         allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'svg'],
         public_id: (req, file) => sanitizeFilename(file.originalname.split('.')[0]), // Sanitize filename without extension
     },
@@ -26,7 +22,5 @@ const storage = new CloudinaryStorage({
 
   
 const upload = multer({ storage: storage });  
-  
-
 
 module.exports = upload;

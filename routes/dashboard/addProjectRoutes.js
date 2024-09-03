@@ -4,7 +4,11 @@ const projectController = require('../../controllers/dashboard/addProjectControl
 const upload = require('../../middlewares/addProject_multerMiddlewares');
 
 // Routes
-router.post('/addProject', upload.single('project_logo'), projectController.addProject);
+// router.post('/addProject', upload.single('project_logo'), projectController.addProject);
+router.post('/addProject', upload.fields([
+    { name: 'project_logo', maxCount: 1 },
+    { name: 'project_thumbnail', maxCount: 1 }
+]),projectController.addProject)
 router.get('/getProject', projectController.getProjects);
 
 router.get('/getProjectById/:id', projectController.getProjectById);

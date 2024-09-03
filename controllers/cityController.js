@@ -1,19 +1,29 @@
 const City = require('../models/cityModel');
 
-exports.addCity = async (req, res) => {
+
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
+  exports.addCity = async (req, res) => {
     const { location, state, priority, status, data } = req.body;
     const file = req.file;
 
-    console.log(req.body);
-    console.log(req.file);
-
-    const parsedData = JSON.parse(data);
-
-    if (!location || !state || !Array.isArray(parsedData)) {
-        return res.status(400).json({ success: false, message: "Location, State, and data are required" });
-    }
-
     try {
+        const parsedData = JSON.parse(data);
+
+        if (!location || !state || !Array.isArray(parsedData)) {
+            return res.status(400).json({ success: false, message: "Location, State, and data are required and data should be an array" });
+        }
+
+        const slugURL = createSlug(location);
+
         const imagePath = file ? file.path : null;
 
         const updatedData = parsedData.map(item => ({
@@ -23,6 +33,7 @@ exports.addCity = async (req, res) => {
 
         const newCity = new City({
             location,
+            slugURL,
             state,
             priority,
             status,
