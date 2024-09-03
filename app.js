@@ -37,6 +37,7 @@ const luxuryProjects = require('./routes/luxuryProjectsRoutes');
 const careerQuery = require('./routes/careerRoutes');
 const cityConfigurationRoutes = require('./routes/projectConfigurationRoutes')
 const bannerImageRoutes = require('./routes/bannerImage');
+const starRera = require('./routes/starRera');
 
 
 const authRoutes = require('./routes/auth/authRoutes');
@@ -56,7 +57,7 @@ dbConfig.connect();
 // Use the routes
 app.use('/categories', categoryRoutes);
 app.use('/jobs', jobRoutes);
-app.use('/amenities', amenitiesRoutes);    //have to work inside
+// app.use('/amenities', amenitiesRoutes);    //have to work inside
 app.use('/subAmenities', subAmenitiesRoutes);    //have to work inside
 app.use('/banks', bankRoutes);
 app.use('/blogs', blogRoutes);
@@ -85,6 +86,7 @@ app.use('/projectContentSEO', projectContentSEORoutes);
 app.use('/projectBrochureWalkthrough', projectBrochureWalkthroughRoutes);
 
 app.use('/bannerImages', bannerImageRoutes);
+app.use('/starRera', starRera);
 
 //enquiry
 

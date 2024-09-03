@@ -8,4 +8,6 @@ router.post('/projectAmenities/:id', projectController.postProjectAmenities);
 // Route to get project amenities
 router.get('/getprojectAmenities/:projectname', projectController.getProjectAmenities);
 
+router.post('/projectsAmenityContent/:projectname', projectController.postContent);
+
 module.exports = router;

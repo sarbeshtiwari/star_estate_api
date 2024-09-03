@@ -10,7 +10,7 @@ router.get('/getConfigurationByCity/:location', configurationController.getProje
 router.put('/updateConfiguration/:id', configurationController.updateProjectConfiguration);
 router.get('/getConfigurationByID/:id', configurationController.getProjectByID);
 
-router.get('/getConfigurationBySlug/:location/s:slugURL', configurationController.getProjectConfigurationBySlugURL);
+router.get('/getConfigurationBySlug/:location/:slugURL', configurationController.getProjectConfigurationBySlugURL);
 router.put('/updateConfigurationStatus/:id', configurationController.updateProjectConfigurationStatus);
 
 router.delete('/deleteConfiguration/:id', configurationController.deleteProjectConfiguration)

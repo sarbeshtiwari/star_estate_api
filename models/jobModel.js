@@ -11,6 +11,7 @@ const JobSchema = new mongoose.Schema({
     min_exp: { type: String, required: true },
     description: { type: String, required: true },
     added_on: { type: Date, required: false, default: Date.now },
+    slugURL: { type: String, required: true },
     status: { type: Boolean, required: false, default: false }
 });
 

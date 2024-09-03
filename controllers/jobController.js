@@ -1,6 +1,16 @@
 const JobModel = require('../models/jobModel');
 const moment = require('moment');
 
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
 // Add a job
 const addJob = async (req, res) => {
     const { metaTitle, metaKeyword, metaDescription, position, nos, location, qualification, min_exp, description, added_on, status } = req.body;
@@ -8,6 +18,7 @@ const addJob = async (req, res) => {
     if (!location || !position || !nos || !qualification || !min_exp || !description) {
         return res.status(400).json({ success: false, message: "Fill the required field" });
     }
+    const slugURL = createSlug(position);
 
     try {
         const newJob = new JobModel({
@@ -21,6 +32,7 @@ const addJob = async (req, res) => {
             min_exp,
             description,
             added_on,
+            slugURL,
             status
         });
 
@@ -56,6 +68,19 @@ const getJobByID = async (req, res) => {
         const job = await JobModel.findById(id);
         if (!job) {
             return res.status(404).json({ error: 'Job not found' });
+        }
+        res.json(job);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+const getJobBySlugURL = async (req, res) => {
+    try {
+        const job = await JobModel.findOne({ slugURL: req.params.slugURL });
+        if (!job) {
+            return res.status(404).json({ message: "Data not found" });
         }
         res.json(job);
     } catch (err) {
@@ -139,7 +164,7 @@ const updateJob = async (req, res) => {
 module.exports = {
     addJob,
     getJobs,
-    getJobByID,
+    getJobByID, getJobBySlugURL,
     updateJobStatus,
     deleteJob,
     updateJob

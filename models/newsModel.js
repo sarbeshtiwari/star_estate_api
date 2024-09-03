@@ -11,6 +11,7 @@ const NewsSchema = new mongoose.Schema({
     imageTitle: { type: String, required: true },
     newsThumb: { type: String, required: true },
     newsImage: { type: String, required: true },
+    slugURL: { type: String, required: true },
     status: { type: Boolean, required: false, default: false }
 });
 

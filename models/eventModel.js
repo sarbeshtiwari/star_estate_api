@@ -7,6 +7,7 @@ const EventSchema = new mongoose.Schema({
     eventName: { type: String, required: true },
     eventDate: { type: Date, required: true },
     eventImage: { type: String, required: true },
+    slugURL: { type: String, required: true },
     status: { type: Boolean, default: false }
 });
 

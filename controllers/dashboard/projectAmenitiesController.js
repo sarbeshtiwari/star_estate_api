@@ -53,3 +53,39 @@ exports.getProjectAmenities = async (req, res) => {
         return res.status(500).json({ success: false, message: "Error Fetching Data" });
     }
 };
+
+
+exports.postContent = async (req, res) => {
+    const { projectname } = req.params;
+    const { amenityContent } = req.body;
+
+    if (!projectname) {
+        return res.json({ success: false, message: "Project Name is required" });
+    }
+
+    try {
+        let project = await UserModel.findOne({ projectname });
+
+        if (project) {
+            project.data1 = [{
+                amenityContent
+            }];
+
+            await project.save();
+            return res.json({ success: true, message: "Project Ratings Updated Successfully" });
+        } else {
+            const newProject = new UserModel({
+                projectname,
+                data1: [{
+                    amenityContent
+                }]
+            });
+
+            await newProject.save();
+            return res.json({ success: true, message: "New Project Created Successfully with Ratings" });
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ success: false, message: "Error Adding or Updating Ratings Data" });
+    }
+};

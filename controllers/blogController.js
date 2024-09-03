@@ -96,6 +96,27 @@ exports.getBlogById = async (req, res) => {
     }
 };
 
+exports.getBlogBySlugURL = async (req, res) => {
+    try {
+        // Find the blog post by slugURL
+        const blog = await BlogModel.findOne({ slugURL: req.params.slugURL });
+        
+        if (!blog) {
+            // If no blog post is found, return a 404 status
+            return res.status(404).json({ message: "Blog not found" });
+        }
+        
+        // Return the found blog post
+        res.json(blog);
+    } catch (err) {
+        // Log the error and return a 500 status
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
+
 // Update a blog by ID
 exports.updateBlog = async (req, res) => {
     const updateData = req.body;

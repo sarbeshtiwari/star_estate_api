@@ -7,6 +7,7 @@ const developerController = require('../controllers/developerController');
 router.post('/addDeveloper', upload.single('developerLogo'), developerController.createDeveloper);
 router.get('/getDeveloper', developerController.getDevelopers);
 router.get('/getDeveloperById/:id', developerController.getDeveloperById);
+router.get('/getDeveloperBySlugURL/:slugURL', developerController.getDeveloperBySlugURL);
 router.put('/updateDeveloper/:id', upload.single('developerLogo'), developerController.updateDeveloper);
 router.put('/updateDeveloperStatus/:id', developerController.updateDeveloperStatus);
 router.delete('/deleteDeveloper/:id', developerController.deleteDeveloper);

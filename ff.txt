@@ -1,8 +1,0 @@
-project amenities working on localhost
-city and subcity working on localhost
-banks and rating working on localhost
-project location & advantages working on localhost
-
-banner image API  (Done);
-star Estate RERA both
-slugURL everywhere

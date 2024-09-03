@@ -4,6 +4,16 @@ const fs = require('fs');
 const moment = require('moment');
 const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
 exports.createEvent = async (req, res) => {
     const {
         metaTitle, 
@@ -17,6 +27,7 @@ exports.createEvent = async (req, res) => {
     if (!eventName || !eventDate) {
         return res.status(400).json({ success: false, message: "Event name and event date are required" });
     }
+    const slugURL = createSlug(eventName);
 
     const newEvent = new EventModel({
         metaTitle, 
@@ -25,6 +36,7 @@ exports.createEvent = async (req, res) => {
         eventName,
         eventDate,
         eventImage: req.file ? req.file.filename : null,
+        slugURL,
         status      
     });
 
@@ -63,6 +75,19 @@ exports.getEventById = async (req, res) => {
         const event = await EventModel.findById(id);
         if (!event) {
             return res.status(404).json({ message: "Event not found" });
+        }
+        res.json(event);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.getEventBySlugURL = async (req, res) => {
+    try {
+        const event = await EventModel.findOne({ slugURL: req.params.slugURL });
+        if (!event) {
+            return res.status(404).json({ message: "Data not found" });
         }
         res.json(event);
     } catch (err) {

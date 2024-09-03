@@ -5,7 +5,6 @@ const SubAmenitySchema = new mongoose.Schema({
     alt_tag: { type: String, required: true },
     status: { type: Boolean, default: false },
     image: { type: String, required: false },
-    category: { type: String, required: true },
 });
 
 const SubAmenityModel = mongoose.model("SubAmenity", SubAmenitySchema);

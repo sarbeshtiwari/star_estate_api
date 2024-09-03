@@ -12,6 +12,7 @@ const DeveloperSchema = new mongoose.Schema({
     developerPriority: { type: Number, required: false },
     description: { type: String, required: false },
     developerLogo: { type: String, required: false },
+    slugURL: { type: String, required: true },
     status: { type: Boolean, required: false, default: false }
 });
 

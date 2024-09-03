@@ -2,6 +2,16 @@ const NewsModel = require('../models/newsModel');
 const moment = require('moment');
 const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
 exports.addNews = async (req, res) => {
     const {
         metaTitle, 
@@ -22,6 +32,7 @@ exports.addNews = async (req, res) => {
     if (!req.files || !req.files.newsThumb || !req.files.newsImage) {
         return res.status(400).json({ success: false, message: 'No files uploaded' });
     }
+    const slugURL = createSlug(heading);
 
     const newReport = new NewsModel({
         metaTitle, 
@@ -34,6 +45,7 @@ exports.addNews = async (req, res) => {
         imageTitle,
         newsThumb: req.files.newsThumb[0].filename, // Assuming single file per field
         newsImage: req.files.newsImage[0].filename,
+        slugURL,
         status        
     });
 
@@ -72,6 +84,19 @@ exports.getNewsById = async (req, res) => {
         const news = await NewsModel.findById(newsId);
         if (!news) {
             return res.status(404).json({ message: "News not found" });
+        }
+        res.json(news);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.getNewsBySlugURL = async (req, res) => {
+    try {
+        const news = await NewsModel.findOne({ slugURL: req.params.slugURL });
+        if (!news) {
+            return res.status(404).json({ message: "Data not found" });
         }
         res.json(news);
     } catch (err) {

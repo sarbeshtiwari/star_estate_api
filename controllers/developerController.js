@@ -3,6 +3,18 @@ const path = require('path');
 const fs = require('fs');
 const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 
+
+const createSlug = (text) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
+
 // Create and Save a New Developer
 exports.createDeveloper = async (req, res) => {
     const {
@@ -29,6 +41,8 @@ exports.createDeveloper = async (req, res) => {
             return res.json({ success: false, message: "Developer Name already found" });
         }
 
+        const slugURL = createSlug(developerName);
+
         const newDeveloper = new DeveloperModel({
             metaTitle, 
             metaKeyword, 
@@ -41,6 +55,7 @@ exports.createDeveloper = async (req, res) => {
             developerPriority, 
             developerLogo: req.file ? req.file.filename : null, 
             description, 
+            slugURL,
             status
         });
 
@@ -71,6 +86,19 @@ exports.getDeveloperById = async (req, res) => {
         const developer = await DeveloperModel.findById(developerId);
         if (!developer) {
             return res.status(404).json({ message: "Developer not found" });
+        }
+        res.json(developer);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.getDeveloperBySlugURL = async (req, res) => {
+    try {
+        const developer = await DeveloperModel.findOne({ slugURL: req.params.slugURL });
+        if (!developer) {
+            return res.status(404).json({ message: "Data not found" });
         }
         res.json(developer);
     } catch (err) {

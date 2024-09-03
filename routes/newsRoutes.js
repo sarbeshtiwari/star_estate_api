@@ -13,6 +13,8 @@ router.get('/getNews', newsController.getAllNews);
 
 router.get('/getNewsById/:id', newsController.getNewsById);
 
+router.get('/getNewsByslugURL/:slugURL', newsController.getNewsBySlugURL);
+
 router.put('/updateNews/:id', upload.fields([
     { name: 'newsThumb', maxCount: 1 },
     { name: 'newsImage', maxCount: 1 }
