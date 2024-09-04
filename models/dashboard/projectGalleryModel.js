@@ -9,6 +9,20 @@ const ProjectGallerySchema = new mongoose.Schema({
     status: { type: Boolean, default: false },
 });
 
+const contentSchema = new mongoose.Schema({
+    projectGalleryContent: { type: String, default: '' },
+});
+
+const GalleryContent = new mongoose.Schema({
+    projectname: { type: String, required: true },
+    data: [contentSchema]
+});
+
+
 const ProjectsGallery = mongoose.model('project_gallery', ProjectGallerySchema);
 
+const GalleryContentModel = mongoose.model('Gallery_content', GalleryContent);
+
+
 module.exports = ProjectsGallery;
+module.exports = GalleryContentModel;

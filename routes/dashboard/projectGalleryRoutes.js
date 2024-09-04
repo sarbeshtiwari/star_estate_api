@@ -24,4 +24,8 @@ router.delete('/deleteProjectGallery/:id', projectGalleryController.deleteProjec
 // Update data with image
 router.put('/updateProjectGallery/:id', upload.array('image', 10), projectGalleryController.updateProjectGallery);
 
+router.post('/projectsGalleryContent/:projectname', projectGalleryController.postContent);
+router.get('/getGalleryContent/:projectname', projectGalleryController.getContent);
+
+
 module.exports = router;

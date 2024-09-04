@@ -190,3 +190,31 @@ exports.updateProjectStatusCategory = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
+exports.getProjectByCity = async (req, res) => {
+    try {
+        const { cityLocation } = req.params;
+        const projects = await Project.find({ cityLocation });
+        if (projects.length === 0) {
+            return res.status(404).json({ message: "No projects found for this Location" });
+        }
+        res.json(projects);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.getLuxuryProject = async (req, res) => {
+    try {
+        const projects = await Project.find({});
+        const luxuryProjects = projects.filter(project => 
+            (project.luxury_priority !== null && project.luxury_priority !== 0) || 
+            (project.project_status && project.project_status.includes('luxury'))
+        );
+        res.json(luxuryProjects);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};

@@ -56,7 +56,7 @@ router.delete('/delete/:id', async (req, res) => {
         }
 
         await BannerImage.findByIdAndDelete(req.params.id);
-        res.status(200).json({ message: 'Banner deleted successfully' });
+        res.status(200).json({ success: true, message: 'Banner deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

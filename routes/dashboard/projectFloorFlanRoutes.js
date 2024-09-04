@@ -12,4 +12,7 @@ router.put('/updateFloorPlanStatus/:id', floorPlanController.updateFloorPlanStat
 router.delete('/deleteFloorPlan/:id', floorPlanController.deleteFloorPlan);
 router.put('/updateFloorPlan/:id', upload.array('image', 10), floorPlanController.updateFloorPlan);
 
+router.post('/projectsFloorPlanContent/:projectname', floorPlanController.postContent);
+router.get('/getFloorContent/:projectname', floorPlanController.getContent);
+
 module.exports = router;

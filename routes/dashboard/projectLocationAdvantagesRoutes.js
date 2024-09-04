@@ -8,4 +8,6 @@ router.post('/projectLocationAdvantages/:id', locationAdvantagesController.postL
 // Route to get project location advantages
 router.get('/getprojectLocationAdvantages/:projectname', locationAdvantagesController.getLocationAdvantages);
 
+router.post('/projectsLocationContent/:projectname', locationAdvantagesController.postContent);
+
 module.exports = router;

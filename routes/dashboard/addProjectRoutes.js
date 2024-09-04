@@ -19,4 +19,7 @@ router.put('/updateProjectStatus/:id', projectController.updateProjectStatus);
 router.delete('/deleteProject/:id', projectController.deleteProject);
 router.put('/updateProjectStatusCategory/:id', projectController.updateProjectStatusCategory);
 
+router.get('/getProjectByLocation/:cityLocation', projectController.getProjectByCity);
+router.get('/getLuxuryProject', projectController.getLuxuryProject);
+
 module.exports = router;

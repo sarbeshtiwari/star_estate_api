@@ -36,7 +36,7 @@ exports.createCareer = async (req, res) => {
             created_at, 
             note, 
         });
-        console.log('sned')
+        console.log('send')
 
         await sendCareerEmail(Name, Email, phoneNumber,  category, location);
         console.log('done')

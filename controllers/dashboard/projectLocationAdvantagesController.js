@@ -64,3 +64,38 @@ exports.getLocationAdvantages = async (req, res) => {
         return res.status(500).json({ success: false, message: "Error Fetching Data" });
     }
 };
+
+exports.postContent = async (req, res) => {
+    const { projectname } = req.params;
+    const { locationContent } = req.body;
+
+    if (!projectname) {
+        return res.json({ success: false, message: "Project Name is required" });
+    }
+
+    try {
+        let project = await UserModel.findOne({ projectname });
+
+        if (project) {
+            project.data1 = [{
+                locationContent
+            }];
+
+            await project.save();
+            return res.json({ success: true, message: "Data Saved Successfully" });
+        } else {
+            const newProject = new UserModel({
+                projectname,
+                data1: [{
+                    locationContent
+                }]
+            });
+
+            await newProject.save();
+            return res.json({ success: true, message: "New Data Created Successfully" });
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ success: false, message: "Error Adding or Updating Data" });
+    }
+};

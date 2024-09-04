@@ -72,7 +72,7 @@ exports.postContent = async (req, res) => {
             }];
 
             await project.save();
-            return res.json({ success: true, message: "Project Ratings Updated Successfully" });
+            return res.json({ success: true, message: "Amenity Content Updated Successfully" });
         } else {
             const newProject = new UserModel({
                 projectname,
@@ -82,10 +82,10 @@ exports.postContent = async (req, res) => {
             });
 
             await newProject.save();
-            return res.json({ success: true, message: "New Project Created Successfully with Ratings" });
+            return res.json({ success: true, message: "New Content Created Successfully" });
         }
     } catch (err) {
         console.error('Error:', err);
-        return res.status(500).json({ success: false, message: "Error Adding or Updating Ratings Data" });
+        return res.status(500).json({ success: false, message: "Error Adding or Updating Data" });
     }
 };

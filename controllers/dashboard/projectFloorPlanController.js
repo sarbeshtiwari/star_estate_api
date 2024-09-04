@@ -1,4 +1,5 @@
 const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
+const FloorPlanContentModel = require('../../models/dashboard/projectFloorPlanModel');
 const FloorPlanModel = require('../../models/dashboard/projectFloorPlanModel');
 
 exports.addFloorPlan = async (req, res) => {
@@ -142,5 +143,60 @@ exports.updateFloorPlan = async (req, res) => {
     } catch (err) {
         console.error('Error:', err);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+};
+
+exports.postContent = async (req, res) => {
+    const { projectname } = req.params;
+    const { floorPlanContent } = req.body;
+
+    if (!projectname) {
+        return res.json({ success: false, message: "Project Name is required" });
+    }
+
+    try {
+        let project = await FloorPlanContentModel.findOne({ projectname });
+
+        if (project) {
+            project.data = [{
+                floorPlanContent
+            }];
+
+            await project.save();
+            return res.json({ success: true, message: "Data Saved Successfully" });
+        } else {
+            const newProject = new FloorPlanContentModel({
+                projectname,
+                data : [{
+                    floorPlanContent
+                }]
+            });
+
+            await newProject.save();
+            return res.json({ success: true, message: "New Data Created Successfully" });
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ success: false, message: "Error Adding or Updating Data" });
+    }
+};
+
+
+exports.getContent = async (req, res) => {
+    const { projectname } = req.params;
+
+    if (!projectname) {
+        return res.json({ success: false, message: "Project Name is required" });
+    }
+
+    try {
+        let project = await FloorPlanContentModel.findOne({ projectname: projectname });
+       
+        
+        res.json(project);
+        }
+    catch (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ success: false, message: "Error fetching Data" });
     }
 };

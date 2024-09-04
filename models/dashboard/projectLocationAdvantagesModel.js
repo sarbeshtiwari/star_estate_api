@@ -8,9 +8,14 @@ const UserDataSchema = new mongoose.Schema({
     status: { type: Boolean, required: true }
 });
 
+const contentSchema = new mongoose.Schema({
+    locationContent: { type: String, default: '' },
+});
+
 const UserSchema = new mongoose.Schema({
     projectname: { type: String, required: true },
-    data: [UserDataSchema]
+    data: [UserDataSchema],
+    data1: [contentSchema]
 });
 
 const UserModel = mongoose.model("projects_LocationAdvantages", UserSchema);

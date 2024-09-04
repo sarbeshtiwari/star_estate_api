@@ -13,6 +13,7 @@ exports.createAdvertisements = async (req, res) => {
         advertisementType,
         advertisementDate,
         advertisementLocation,
+        videoURL,
         status
     } = req.body;
 
@@ -28,7 +29,8 @@ exports.createAdvertisements = async (req, res) => {
         advertisementType,
         advertisementDate,
         advertisementLocation,
-        advertisementImage: req.file ? req.file.filename : null,
+        videoURL,
+        advertisementImage: req.file ? req.file.filename : ' ',
         status      
     });
 
