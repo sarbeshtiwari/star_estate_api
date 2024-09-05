@@ -9,6 +9,7 @@ router.get('/getConfiguration', configurationController.getConfiguration);
 router.get('/getConfigurationByCity/:location', configurationController.getProjectConfigurationByCity);
 router.put('/updateConfiguration/:id', configurationController.updateProjectConfiguration);
 router.get('/getConfigurationByID/:id', configurationController.getProjectByID);
+router.get('/getConfigurationByLocationAndType/:location/:projectType', configurationController.getProjectByLocationAndType);
 
 router.get('/getConfigurationBySlug/:location/:slugURL', configurationController.getProjectConfigurationBySlugURL);
 router.put('/updateConfigurationStatus/:id', configurationController.updateProjectConfigurationStatus);

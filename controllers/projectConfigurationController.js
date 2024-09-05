@@ -7,12 +7,10 @@ function createSlug(projectConfiguration, location) {
         .toLowerCase()
         .replace(/\s+/g, '-'); // Replace spaces with hyphens
 }
-
-
   
 exports.addProjectConfiguration = async (req, res) => {
     try {
-        const { location, data } = req.body;
+        const { location, projectConfiguration, data } = req.body;
         const configurationData = JSON.parse(data);
 
         // Create an array of configuration objects with slug URLs
@@ -20,10 +18,11 @@ exports.addProjectConfiguration = async (req, res) => {
             metaTitle: item.metaTitle,
             metaKeyword: item.metaKeyword,
             metaDescription: item.metaDescription,
-            projectConfiguration: item.projectConfiguration,
+            // projectConfiguration: item.projectConfiguration,
+            projectType: item.projectType,
             ctcontent: item.ctcontent,
             schema: item.schema,
-            slugURL: createSlug(item.projectConfiguration, location),
+            slugURL: createSlug(projectConfiguration, location),
         }));
 
         // Process each configuration object
@@ -31,19 +30,40 @@ exports.addProjectConfiguration = async (req, res) => {
             // Find if a configuration with the same location and projectConfiguration exists
             const existingConfig = await ProjectConfiguration.findOne({
                 location: location,
-                'data.projectConfiguration': config.projectConfiguration
+                projectConfiguration : projectConfiguration,
             });
 
             if (existingConfig) {
-                // Update the existing configuration
-                await ProjectConfiguration.updateOne(
-                    { location: location, 'data.projectConfiguration': config.projectConfiguration },
-                    { $set: { 'data.$': config } }
+                // Check if projectType exists for the found configuration
+                const projectTypeExists = existingConfig.data.some(
+                    (dataItem) => dataItem.projectType === config.projectType
                 );
+
+                if (projectTypeExists) {
+                    // Update the existing configuration for the projectType
+                    await ProjectConfiguration.updateOne(
+                        { 
+                            location: location, 
+                            projectConfiguration : projectConfiguration, 
+                            'data.projectType': config.projectType 
+                        },
+                        { $set: { 'data.$': config } }
+                    );
+                } else {
+                    // Add the new projectType to the existing configuration
+                    await ProjectConfiguration.updateOne(
+                        { 
+                            location: location, 
+                            projectConfiguration: projectConfiguration
+                        },
+                        { $push: { data: config } }
+                    );
+                }
             } else {
-                // Add a new configuration
+                // No configuration found, create a new one
                 await ProjectConfiguration.create({
                     location,
+                    projectConfiguration,
                     data: [config]  // Create a new document with the current configuration
                 });
             }
@@ -55,7 +75,6 @@ exports.addProjectConfiguration = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server Error' });
     }
 };
-
 
 
 exports.getConfiguration = async (req, res) => {
@@ -115,6 +134,28 @@ exports.getProjectByID = async (req, res) => {
         if (!projectConfigurations) {
             return res.status(404).json({ error: 'Data not found' });
         }
+        res.json(projectConfigurations);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.getProjectByLocationAndType = async (req, res) => {
+    const { location, projectType, projectConfiguration } = req.params; // Extract location and projectType from request parameters
+
+    try {
+        // Find the project configuration by location and project type
+        const projectConfigurations = await ProjectConfiguration.find({
+            location: location,
+            'data.projectType': projectType,
+            'data.projectConfiguration': projectConfiguration
+        });
+
+        if (!projectConfigurations) {
+            return res.status(404).json({ error: 'Data not found' });
+        }
+
         res.json(projectConfigurations);
     } catch (err) {
         console.error(err);
