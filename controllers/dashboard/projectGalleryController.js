@@ -1,8 +1,8 @@
-const ProjectsGallery = require('../../models/dashboard/projectGalleryModel');
+const {ProjectsGallery} = require('../../models/dashboard/projectGalleryModel');
 const fs = require('fs');
 const path = require('path');
 const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
-const GalleryContentModel = require('../../models/dashboard/projectGalleryModel');
+const {GalleryContentModel} = require('../../models/dashboard/projectGalleryModel');
 
 // Add Project Gallery
 exports.addProjectGallery = async (req, res) => {

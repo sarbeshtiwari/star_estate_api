@@ -1,6 +1,6 @@
 const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
-const FloorPlanContentModel = require('../../models/dashboard/projectFloorPlanModel');
-const FloorPlanModel = require('../../models/dashboard/projectFloorPlanModel');
+const {FloorPlanContentModel} = require('../../models/dashboard/projectFloorPlanModel');
+const {FloorPlanModel} = require('../../models/dashboard/projectFloorPlanModel');
 
 exports.addFloorPlan = async (req, res) => {
     try {
@@ -192,6 +192,7 @@ exports.getContent = async (req, res) => {
     try {
         let project = await FloorPlanContentModel.findOne({ projectname: projectname });
        
+        console.log('called')
         
         res.json(project);
         }

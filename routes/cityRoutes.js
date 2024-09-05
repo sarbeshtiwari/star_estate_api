@@ -12,4 +12,6 @@ router.put('/updateCityStatus/:id', cityController.updateCityStatus);
 router.delete('/deleteCity/:id', cityController.deleteCity);
 router.put('/updateCity/:cityId/:location_type', uploadCity.single('image'), cityController.updateCity);
 
+router.get('/getCityByState/:state', cityController.getCityByState);
+
 module.exports = router;

@@ -25,6 +25,7 @@ exports.addProject = async (req, res) => {
             metaDescription,
             projectName,
             projectAddress,
+            state,
             cityLocation,
             projectLocality,
             projectConfiguration,
@@ -34,6 +35,7 @@ exports.addProject = async (req, res) => {
             ivr_no,
             locationMap,
             rera_no,
+            reraWebsite,
             city_priority,
             luxury_priority,
             newLaunch_priority,
@@ -61,8 +63,10 @@ exports.addProject = async (req, res) => {
 
         const project = new Project({
             ...req.body, slugURL,
+            
             project_logo: req.files.project_logo[0].filename,
             project_thumbnail: req.files.project_thumbnail[0].filename,
+            rera_qr: req.files.rera_qr[0].filename,
             // project_logo: req.file ? req.file.path : null,
             // project_thumbnail: req.file ? req.file.path : null
         });
@@ -115,8 +119,16 @@ exports.getProjectById = async (req, res) => {
 exports.updateProject = async (req, res) => {
     try {
         const updateData = req.body;
-        if (req.file) {
-            updateData.project_logo = req.file.filename;
+        if (req.files) {
+            if (req.files.rera_qr && req.files.rera_qr[0]) {
+                updateData.rera_qr = req.files.rera_qr[0].filename;
+            }
+            if (req.files.project_thumbnail && req.files.project_thumbnail[0]) {
+                updateData.project_thumbnail = req.files.project_thumbnail[0].filename;
+            }
+            if (req.files.project_logo && req.files.project_logo[0]) {
+                updateData.project_logo = req.files.project_logo[0].filename;
+            }
         }
         const updatedProject = await Project.findByIdAndUpdate(req.params.id, updateData, { new: true });
         if (!updatedProject) {
@@ -215,6 +227,27 @@ exports.getLuxuryProject = async (req, res) => {
         res.json(luxuryProjects);
     } catch (error) {
         console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.getProjectBySlug = async (req, res) => {
+    const { slugURL } = req.params;
+
+    if (!slugURL || typeof slugURL !== 'string') {
+        return res.status(400).send("Invalid URL");
+    }
+
+    try {
+        const contentSEO = await Project.find({ slugURL: slugURL });
+
+        if (contentSEO.length === 0) {
+            return res.status(404).send("No Data found for the given project Name");
+        }
+
+        res.json(contentSEO);
+    } catch (err) {
+        console.error('Database query error:', err);
         res.status(500).send("Internal Server Error");
     }
 };

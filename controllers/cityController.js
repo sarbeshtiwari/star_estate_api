@@ -63,7 +63,7 @@ exports.getCityByCityAndProjectType = async (req, res) => {
 
     try {
         const city = await City.find({
-            location: location,
+            slugURL: location,
             'data.location_type': location_type
         });
 
@@ -151,7 +151,7 @@ exports.updateCity = async (req, res) => {
             return res.status(400).json({ success: false, message: "Data must be an array" });
         }
 
-         const existingCity = await City.findOne({ location: cityId });
+         const existingCity = await City.findOne({ slugURL: cityId });
 
         if (!existingCity) {
             return res.status(404).json({ success: false, message: "City not found" });
@@ -246,3 +246,23 @@ exports.updateCity = async (req, res) => {
 //         res.status(500).send("Internal Server Error");
 //     }
 // };
+
+
+exports.getCityByState = async (req, res) => {
+    const { state } = req.params;
+
+    try {
+        const city = await City.find({
+            state: state,
+        });
+
+        if (!city.length) {
+            return res.status(404).json({ error: 'City not found' });
+        }
+
+        res.json(city);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
