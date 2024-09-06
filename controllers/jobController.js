@@ -6,7 +6,7 @@ const createSlug = (text) => {
       .toLowerCase()
       .trim()
       .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
+      .replace(/\s+/g, '_')
       .replace(/-+/g, '-')
       .replace(/^-+|-+$/g, '');
   };
