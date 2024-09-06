@@ -10,4 +10,6 @@ router.put('/updateCategoryStatus/:id', categoryController.updateCategoryStatus)
 router.delete('/deleteCategory/:id', categoryController.deleteCategory);
 router.put('/updateCategory/:id', categoryController.updateCategory);
 
+router.get('/getCategoryDetails/:category', categoryController.getCategoryByType);
+
 module.exports = router;

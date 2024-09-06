@@ -41,6 +41,7 @@ const starRera = require('./routes/starRera');
 const advertisement = require('./routes/advertisements')
 const awards = require('./routes/awards');
 const clientSpeak = require('./routes/clientSpeakRoutes');
+const configurationFAQ = require('./routes/projectConfigurationFAQ');
 
 const authRoutes = require('./routes/auth/authRoutes');
 const protectedRoutes = require('./routes/auth/protectedRoutes');
@@ -75,6 +76,7 @@ app.use('/events', eventRoutes);
 app.use('/images', imageRoutes);
 app.use('/city', cityRoutes);
 app.use('/cityConfiguration', cityConfigurationRoutes);
+app.use('/configurationFAQ', configurationFAQ);
 app.use('/faqs', faqRoutes);
 app.use('/subCity', subCityRoutes);
 app.use('/subCityFaqs', subCityFaqRoutes);

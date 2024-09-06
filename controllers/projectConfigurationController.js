@@ -10,72 +10,119 @@ function createSlug(projectConfiguration, location) {
   
 exports.addProjectConfiguration = async (req, res) => {
     try {
-        const { location, projectConfiguration, data } = req.body;
-        const configurationData = JSON.parse(data);
+        const { location, projectConfiguration, meta_title, meta_key, meta_desc, projectType, ctcontent, schema } = req.body;
 
-        // Create an array of configuration objects with slug URLs
-        const configurations = configurationData.map(item => ({
-            metaTitle: item.metaTitle,
-            metaKeyword: item.metaKeyword,
-            metaDescription: item.metaDescription,
-            // projectConfiguration: item.projectConfiguration,
-            projectType: item.projectType,
-            ctcontent: item.ctcontent,
-            schema: item.schema,
+        // Create the configuration object
+        const config = {
+            location: location,
+            projectConfiguration: projectConfiguration,
+            metaTitle: meta_title,
+            metaKeyword: meta_key,
+            metaDescription: meta_desc,
+            projectType: projectType,
+            ctcontent: ctcontent,
+            schema: schema,
             slugURL: createSlug(projectConfiguration, location),
-        }));
+            status: false,  // Default status as false
+        };
 
-        // Process each configuration object
-        for (const config of configurations) {
-            // Find if a configuration with the same location and projectConfiguration exists
-            const existingConfig = await ProjectConfiguration.findOne({
-                location: location,
-                projectConfiguration : projectConfiguration,
-            });
+        // Find if a configuration with the same location and projectConfiguration exists
+        const existingConfig = await ProjectConfiguration.findOne({
+            location: location,
+            projectConfiguration: projectConfiguration,
+            projectType: projectType,
+        });
 
-            if (existingConfig) {
-                // Check if projectType exists for the found configuration
-                const projectTypeExists = existingConfig.data.some(
-                    (dataItem) => dataItem.projectType === config.projectType
-                );
-
-                if (projectTypeExists) {
-                    // Update the existing configuration for the projectType
-                    await ProjectConfiguration.updateOne(
-                        { 
-                            location: location, 
-                            projectConfiguration : projectConfiguration, 
-                            'data.projectType': config.projectType 
-                        },
-                        { $set: { 'data.$': config } }
-                    );
-                } else {
-                    // Add the new projectType to the existing configuration
-                    await ProjectConfiguration.updateOne(
-                        { 
-                            location: location, 
-                            projectConfiguration: projectConfiguration
-                        },
-                        { $push: { data: config } }
-                    );
-                }
-            } else {
-                // No configuration found, create a new one
-                await ProjectConfiguration.create({
-                    location,
-                    projectConfiguration,
-                    data: [config]  // Create a new document with the current configuration
-                });
-            }
+        if (existingConfig) {
+            // Update the existing configuration
+            await ProjectConfiguration.updateOne(
+                { 
+                    location: location, 
+                    projectConfiguration: projectConfiguration, 
+                    projectType: projectType 
+                },
+                { $set: config }
+            );
+            res.status(200).json({ success: true, message: 'Configuration updated successfully' });
+        } else {
+            // No configuration found, create a new one
+            await ProjectConfiguration.create(config);
+            res.status(201).json({ success: true, message: 'Configuration created successfully' });
         }
 
-        res.status(201).json({ success: true, message: 'Configuration processed successfully' });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ success: false, message: 'Server Error' });
     }
 };
 
+// exports.addProjectConfiguration = async (req, res) => {
+//     try {
+//         const { location, projectConfiguration, data } = req.body;
+//         const configurationData = JSON.parse(data);
+
+//         // Create an array of configuration objects with slug URLs
+//         const configurations = configurationData.map(item => ({
+//             metaTitle: item.metaTitle,
+//             metaKeyword: item.metaKeyword,
+//             metaDescription: item.metaDescription,
+//             // projectConfiguration: item.projectConfiguration,
+//             projectType: item.projectType,
+//             ctcontent: item.ctcontent,
+//             schema: item.schema,
+//             slugURL: createSlug(projectConfiguration, location),
+//         }));
+
+//         // Process each configuration object
+//         for (const config of configurations) {
+//             // Find if a configuration with the same location and projectConfiguration exists
+//             const existingConfig = await ProjectConfiguration.findOne({
+//                 location: location,
+//                 projectConfiguration : projectConfiguration,
+//             });
+
+//             if (existingConfig) {
+//                 // Check if projectType exists for the found configuration
+//                 const projectTypeExists = existingConfig.data.some(
+//                     (dataItem) => dataItem.projectType === config.projectType
+//                 );
+
+//                 if (projectTypeExists) {
+//                     // Update the existing configuration for the projectType
+//                     await ProjectConfiguration.updateOne(
+//                         { 
+//                             location: location, 
+//                             projectConfiguration : projectConfiguration, 
+//                             'data.projectType': config.projectType 
+//                         },
+//                         { $set: { 'data.$': config } }
+//                     );
+//                 } else {
+//                     // Add the new projectType to the existing configuration
+//                     await ProjectConfiguration.updateOne(
+//                         { 
+//                             location: location, 
+//                             projectConfiguration: projectConfiguration
+//                         },
+//                         { $push: { data: config } }
+//                     );
+//                 }
+//             } else {
+//                 // No configuration found, create a new one
+//                 await ProjectConfiguration.create({
+//                     location,
+//                     projectConfiguration,
+//                     data: [config]  // Create a new document with the current configuration
+//                 });
+//             }
+//         }
+
+//         res.status(201).json({ success: true, message: 'Configuration processed successfully' });
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).json({ success: false, message: 'Server Error' });
+//     }
+// };
 
 exports.getConfiguration = async (req, res) => {
     try {

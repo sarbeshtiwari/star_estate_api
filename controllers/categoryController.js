@@ -38,6 +38,26 @@ const addCategory = async (req, res) => {
     }
 };
 
+const getCategoryByType = async (req, res) => {
+    const { category } = req.params;
+
+    try {
+             
+        const data = await UserModel.find({ slugURL: category });
+        
+        if (data.length === 0) {
+            // If no category is found, return a 404 error
+            return res.status(404).json({ error: 'Category not found' });
+        }
+
+        // Send the data back in the response
+        res.json(data);
+    } catch (err) {
+        console.error('Error fetching category:', err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
 // Fetch all categories
 const getCategories = async (req, res) => {
     try {
@@ -151,6 +171,7 @@ module.exports = {
     addCategory,
     getCategories,
     getCategoryByID,
+    getCategoryByType,
     updateCategoryStatus,
     deleteCategory,
     updateCategory
