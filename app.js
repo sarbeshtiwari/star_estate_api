@@ -42,6 +42,7 @@ const advertisement = require('./routes/advertisements')
 const awards = require('./routes/awards');
 const clientSpeak = require('./routes/clientSpeakRoutes');
 const configurationFAQ = require('./routes/projectConfigurationFAQ');
+const projectBannerImages = require('./routes/projectBannerImagesRoutes');
 
 const authRoutes = require('./routes/auth/authRoutes');
 const protectedRoutes = require('./routes/auth/protectedRoutes');
@@ -96,6 +97,7 @@ app.use('/projectFaq', projectfaqRoutes);
 app.use('/projectContentSEO', projectContentSEORoutes);
 app.use('/projectBrochureWalkthrough', projectBrochureWalkthroughRoutes);
 
+app.use('/projectBannerImages', projectBannerImages);
 app.use('/bannerImages', bannerImageRoutes);
 app.use('/starRera', starRera);
 

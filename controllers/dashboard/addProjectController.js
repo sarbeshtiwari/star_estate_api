@@ -2,6 +2,11 @@ const Project = require('../../models/dashboard/addProjectModel');
 const fs = require('fs');
 const path = require('path');
 const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
+const BannerImage = require('../../models/projectBannerImageModel');
+
+
+
+
 
 
 // Utility function to create a URL slug
@@ -143,20 +148,67 @@ exports.updateProject = async (req, res) => {
 
 exports.updateProjectStatus = async (req, res) => {
     try {
-        const { status } = req.body;
+        const { status, slugURL } = req.body;
+       
+
+        // Validate if the status is boolean
         if (typeof status !== 'boolean') {
+           
             return res.status(400).json({ success: false, message: "Status must be a boolean value (true or false)" });
         }
+        if (slugURL){
+            // Find banner images using the slugURL
+            const bannerImages = await BannerImage.find({ projectName: slugURL });
+            
+            // Check if any banner images were found for the given slugURL
+            if (bannerImages.length === 0) {
+                return res.status(400).json({ success: false, message: "No banner images found for this Project. Please add a banner image first." });
+            }
+
+            // Check if there is at least one active banner image (status = true)
+            const activeBannerImage = bannerImages.find(banner => banner.status === true);
+            
+            // If no active banner image is found, return a message to activate one first
+            if (!activeBannerImage) {
+                return res.status(400).json({ success: false, message: "No active banner image found. Please activate at least one banner image before updating the project status." });
+            }
+        };
+
+        
+
+        // Proceed to update the project's status if an active banner image is found
         const updatedProject = await Project.findByIdAndUpdate(req.params.id, { status }, { new: true });
+
+        // Check if the project was found and updated
         if (!updatedProject) {
             return res.status(404).json({ success: false, message: "Project not found" });
         }
+
+        // Return success message after updating the project's status
         res.json({ success: true, message: "Project status updated successfully", updatedProject });
+
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }
 };
+
+// exports.updateProjectStatus = async (req, res) => {
+//     try {
+//         const { status } = req.body;
+//         if (typeof status !== 'boolean') {
+//             return res.status(400).json({ success: false, message: "Status must be a boolean value (true or false)" });
+//         }
+//         const updatedProject = await Project.findByIdAndUpdate(req.params.id, { status }, { new: true });
+//         if (!updatedProject) {
+//             return res.status(404).json({ success: false, message: "Project not found" });
+//         }
+//         res.json({ success: true, message: "Project status updated successfully", updatedProject });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// };
 
 exports.deleteProject = async (req, res) => {
     try {

@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 // Floor Plan Schema
 const FloorPlanSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    area: { type: String, required: true },
-    image: { type: String, required: true },
+    areaRangeSqft: { type: String, required: true },
+    areaRangeSqm: { type: String, required: true },
+    image: { type: String, required: false },
     projectname: { type: String, required: true },
     status: { type: Boolean, default: false }
 });

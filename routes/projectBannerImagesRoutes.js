@@ -1,6 +1,6 @@
 const express = require('express');
-const upload = require('../middlewares/bannerImage_Middleware');
-const BannerImage = require('../models/bannerImagesModel');
+const upload = require('../middlewares/projectBannerImage_Middleware');
+const BannerImage = require('../models/projectBannerImageModel');
 const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.post('/addImages', upload.fields([
     { name: 'tablet_image', maxCount: 1 }
 ]), async (req, res) => {
     try {
-        const { alt_tag_desktop, alt_tag_mobile, alt_tag_tablet } = req.body;
+        const { alt_tag_desktop, alt_tag_mobile, alt_tag_tablet, projectName } = req.body;
 
         const newBanner = new BannerImage({
             desktop_image_url: req.files.desktop_image ? req.files.desktop_image[0].path : '',
@@ -20,6 +20,7 @@ router.post('/addImages', upload.fields([
             alt_tag_desktop,
             alt_tag_mobile,
             alt_tag_tablet,
+            projectName,
         });
 
         await newBanner.save();
@@ -30,9 +31,10 @@ router.post('/addImages', upload.fields([
 });
 
 // Get all banner images
-router.get('/get', async (req, res) => {
+router.get('/get/:projectName', async (req, res) => {
+    const {projectName} = req.params;
     try {
-        const banners = await BannerImage.find();
+        const banners = await BannerImage.find({projectName});
         res.status(200).json(banners);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -62,7 +64,6 @@ router.delete('/delete/:id', async (req, res) => {
     }
 });
 
-
 router.put('/updateStatus/:id', async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
@@ -88,6 +89,5 @@ router.put('/updateStatus/:id', async (req, res) => {
         }
     }
 })
-
 
 module.exports = router;
