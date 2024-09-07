@@ -39,36 +39,37 @@ exports.postProjectBanks = async (req, res) => {
 
 exports.postProjectRatings = async (req, res) => {
     const { projectname } = req.params;
-    const { amenities, lifestyle, layout, connectivity, value_for_money } = req.body;
+    const { accountNumber, IFSCcode, CIFno, bankName, bankAddress, otherDetails } = req.body;
 
     if (!projectname) {
         return res.json({ success: false, message: "Project Name is required" });
     }
 
     try {
+        // Find the existing project by projectname
         let project = await UserModel.findOne({ projectname });
 
         if (project) {
-            project.data1 = [{
-                amenities,
-                lifestyle,
-                layout,
-                connectivity,
-                value_for_money
-            }];
+            // Update the existing project with new data
+            project.accountNumber = accountNumber || project.accountNumber;
+            project.IFSCcode = IFSCcode || project.IFSCcode;
+            project.CIFno = CIFno || project.CIFno;
+            project.bankName = bankName || project.bankName;
+            project.bankAddress = bankAddress || project.bankAddress;
+            project.otherDetails = otherDetails || project.otherDetails;
 
             await project.save();
             return res.json({ success: true, message: "Project Ratings Updated Successfully" });
         } else {
+            // Create a new project with the provided data
             const newProject = new UserModel({
                 projectname,
-                data1: [{
-                    amenities,
-                    lifestyle,
-                    layout,
-                    connectivity,
-                    value_for_money
-                }]
+                accountNumber,
+                IFSCcode,
+                CIFno,
+                bankName,
+                bankAddress,
+                otherDetails
             });
 
             await newProject.save();
@@ -79,6 +80,7 @@ exports.postProjectRatings = async (req, res) => {
         return res.status(500).json({ success: false, message: "Error Adding or Updating Ratings Data" });
     }
 };
+
 
 exports.getProjectData = async (req, res) => {
     const { projectname } = req.params;

@@ -57,6 +57,11 @@ const corsOptions = {
   },
   credentials: true,
 };
+// const corsOptions = {
+//   origin: 'https://ecis.in', // directly specify the allowed origin
+//   credentials: true,
+// };
+
 
 app.use(cors(corsOptions));
 app.use('/uploads', express.static('uploads'));
