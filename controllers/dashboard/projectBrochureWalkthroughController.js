@@ -1,4 +1,4 @@
-const UserModel = require('../../models/dashboard/projectBrochureWalkthroughModel');
+const WalkthroughModel = require('../../models/dashboard/projectBrochureWalkthroughModel');
 // const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
 
 // Add Brochure and Walkthrough
@@ -10,8 +10,8 @@ exports.addBrochureWalkthrough = async (req, res) => {
         return res.status(400).json({ success: false, message: "Fill the required field" });
     }
 
-    // const newReport = new UserModel({ walkthrough, brochure, projectname, status });
-    const newReport = new UserModel({ walkthrough, projectname, status });
+    // const newReport = new WalkthroughModel({ walkthrough, brochure, projectname, status });
+    const newReport = new WalkthroughModel({ walkthrough, projectname, status });
 
     try {
         console.log("New Data:", newReport);
@@ -32,7 +32,7 @@ exports.getBrochureWalkthroughByProjectName = async (req, res) => {
     }
 
     try {
-        const brochureWalkthrough = await UserModel.find({ projectname: id });
+        const brochureWalkthrough = await WalkthroughModel.find({ projectname: id });
         res.json(brochureWalkthrough);
     } catch (err) {
         console.error('Database query error:', err);
@@ -45,7 +45,7 @@ exports.fetchBrochureWalkthroughById = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const brochureWalkthrough = await UserModel.findById(id);
+        const brochureWalkthrough = await WalkthroughModel.findById(id);
         if (!brochureWalkthrough) {
             return res.status(404).json({ error: 'Brochure_Walkthrough not found' });
         }
@@ -66,7 +66,7 @@ exports.updateBrochureWalkthroughStatus = async (req, res) => {
     }
 
     try {
-        const updatedBrochureWalkthrough = await UserModel.findByIdAndUpdate(id, { status }, { new: true });
+        const updatedBrochureWalkthrough = await WalkthroughModel.findByIdAndUpdate(id, { status }, { new: true });
 
         if (!updatedBrochureWalkthrough) {
             return res.status(404).json({ success: false, message: "Brochure_Walkthrough not found" });
@@ -84,7 +84,7 @@ exports.deleteBrochureWalkthrough = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedBrochureWalkthrough = await UserModel.findByIdAndDelete(id);
+        const deletedBrochureWalkthrough = await WalkthroughModel.findByIdAndDelete(id);
 
         if (!deletedBrochureWalkthrough) {
             return res.status(404).json({ success: false, message: "Brochure_Walkthrough not found" });
@@ -112,7 +112,7 @@ exports.updateBrochureWalkthrough = async (req, res) => {
     // }
 
     try {
-        const updatedDocument = await UserModel.findByIdAndUpdate(id, updatedData, { new: true, runValidators: true });
+        const updatedDocument = await WalkthroughModel.findByIdAndUpdate(id, updatedData, { new: true, runValidators: true });
 
         if (!updatedDocument) {
             return res.status(404).json({ success: false, message: "Document not found" });

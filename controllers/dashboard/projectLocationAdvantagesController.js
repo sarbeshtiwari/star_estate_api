@@ -1,4 +1,4 @@
-const UserModel = require('../../models/dashboard/projectLocationAdvantagesModel');
+const ProjectLocationModel = require('../../models/dashboard/projectLocationAdvantagesModel');
 
 exports.postLocationAdvantages = async (req, res) => {
     const { id } = req.params;
@@ -9,7 +9,7 @@ exports.postLocationAdvantages = async (req, res) => {
     }
 
     try {
-        let project = await UserModel.findOne({ projectname });
+        let project = await ProjectLocationModel.findOne({ projectname });
 
         if (project) {
             const existingIndex = project.data.findIndex(item => item.LocationAdvantagesId === id);
@@ -29,7 +29,7 @@ exports.postLocationAdvantages = async (req, res) => {
             await project.save();
             return res.json({ success: true, message: "Data Updated Successfully" });
         } else {
-            const newProject = new UserModel({
+            const newProject = new ProjectLocationModel({
                 projectname,
                 data: [{
                     LocationAdvantagesId: id,
@@ -53,7 +53,7 @@ exports.getLocationAdvantages = async (req, res) => {
     const { projectname } = req.params;
 
     try {
-        const project = await UserModel.findOne({ projectname });
+        const project = await ProjectLocationModel.findOne({ projectname });
 
         if (!project) {
             return res.status(404).json({ error: 'Data not found' });
@@ -74,7 +74,7 @@ exports.postContent = async (req, res) => {
     }
 
     try {
-        let project = await UserModel.findOne({ projectname });
+        let project = await ProjectLocationModel.findOne({ projectname });
 
         if (project) {
             project.data1 = [{
@@ -84,7 +84,7 @@ exports.postContent = async (req, res) => {
             await project.save();
             return res.json({ success: true, message: "Data Saved Successfully" });
         } else {
-            const newProject = new UserModel({
+            const newProject = new ProjectLocationModel({
                 projectname,
                 data1: [{
                     locationContent

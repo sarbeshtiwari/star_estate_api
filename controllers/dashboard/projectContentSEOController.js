@@ -1,4 +1,4 @@
-const UserModel = require('../../models/dashboard/projectContentSEOModel');
+const ContentModel = require('../../models/dashboard/projectContentSEOModel');
 
 // Add ContentSEO
 exports.addContentSEO = async (req, res) => {
@@ -8,7 +8,7 @@ exports.addContentSEO = async (req, res) => {
         return res.status(400).json({ success: false, message: "Fill the required field" });
     }
     
-    const newReport = new UserModel({ description, schema, projectname, status });
+    const newReport = new ContentModel({ description, schema, projectname, status });
     
     try {
         console.log("New Data:", newReport);
@@ -29,7 +29,7 @@ exports.getContentSEOByProjectName = async (req, res) => {
     }
 
     try {
-        const contentSEO = await UserModel.find({ projectname: id });
+        const contentSEO = await ContentModel.find({ projectname: id });
 
         if (contentSEO.length === 0) {
             return res.status(404).send("No ContentSEO found for the given projectName");
@@ -47,7 +47,7 @@ exports.fetchContentSEObyId = async (req, res) => {
     const { id } = req.params;
   
     try {
-        const contentSEO = await UserModel.findById(id);
+        const contentSEO = await ContentModel.findById(id);
         if (!contentSEO) {
             return res.status(404).json({ error: 'ContentSEO not found' });
         }
@@ -68,7 +68,7 @@ exports.updateContentSEOStatus = async (req, res) => {
     }
 
     try {
-        const updatedContentSEO = await UserModel.findByIdAndUpdate(id, { status }, { new: true });
+        const updatedContentSEO = await ContentModel.findByIdAndUpdate(id, { status }, { new: true });
 
         if (!updatedContentSEO) {
             return res.status(404).json({ success: false, message: "ContentSEO not found" });
@@ -86,7 +86,7 @@ exports.deleteContentSEO = async (req, res) => {
     const { id } = req.params;
     
     try {
-        const deletedContentSEO = await UserModel.findByIdAndDelete(id);
+        const deletedContentSEO = await ContentModel.findByIdAndDelete(id);
 
         if (!deletedContentSEO) {
             return res.status(404).json({ success: false, message: "ContentSEO not found" });
@@ -102,16 +102,16 @@ exports.deleteContentSEO = async (req, res) => {
 // Update ContentSEO
 exports.updateContentSEO = async (req, res) => {
     const { id } = req.params; 
-    const { description, schema, status } = req.body;
+    const { briefDescription, description, schema, status } = req.body;
     
     if (!description) {
         return res.status(400).json({ success: false, message: "Fill the required field" });
     }
 
     try {
-        const updatedDocument = await UserModel.findByIdAndUpdate(
+        const updatedDocument = await ContentModel.findByIdAndUpdate(
             id, 
-            { description, status, schema },
+            {briefDescription, description, status, schema },
             { new: true, runValidators: true }
         );
 

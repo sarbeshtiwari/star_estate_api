@@ -194,6 +194,18 @@ exports.updateCity = async (req, res) => {
     }
 };
 
+exports.getCityBySlugURL = async (req, res) => {
+    try {
+        const city = await City.findOne({ slugURL: req.params.slugURL });
+        if (!city) {
+            return res.status(404).json({ message: "Data not found" });
+        }
+        res.json(city);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
 
 
 // exports.updateCity = async (req, res) => {

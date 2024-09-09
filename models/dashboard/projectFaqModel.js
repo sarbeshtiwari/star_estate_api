@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    faqType: { type: String, required: true },
+   
     faqQuestion: { type: String, required: true },
     faqAnswer: { type: String, required: true },
     projectname: { type: String, required: true },

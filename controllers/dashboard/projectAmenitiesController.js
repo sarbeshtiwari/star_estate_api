@@ -1,4 +1,4 @@
-const UserModel = require('../../models/dashboard/projectAmenitiesModel');
+const ProjectAmenitiesModel = require('../../models/dashboard/projectAmenitiesModel');
 
 exports.postProjectAmenities = async (req, res) => {
     const { id } = req.params;
@@ -10,7 +10,7 @@ exports.postProjectAmenities = async (req, res) => {
     }
 
     try {
-        let project = await UserModel.findOne({ projectname });
+        let project = await ProjectAmenitiesModel.findOne({ projectname });
 
         if (project) {
             const existingAmenityIndex = project.data.findIndex(item => item.amenityId === id);
@@ -24,7 +24,7 @@ exports.postProjectAmenities = async (req, res) => {
             await project.save();
             return res.json({ success: true, message: "Data Updated Successfully" });
         } else {
-            const newProject = new UserModel({
+            const newProject = new ProjectAmenitiesModel({
                 projectname,
                 data: [{ amenityId: id, status }]
             });
@@ -42,7 +42,7 @@ exports.getProjectAmenities = async (req, res) => {
     const { projectname } = req.params;
 
     try {
-        const project = await UserModel.findOne({ projectname });
+        const project = await ProjectAmenitiesModel.findOne({ projectname });
 
         if (!project) {
             return res.status(404).json({ error: 'Data not found' });
@@ -64,7 +64,7 @@ exports.postContent = async (req, res) => {
     }
 
     try {
-        let project = await UserModel.findOne({ projectname });
+        let project = await ProjectAmenitiesModel.findOne({ projectname });
 
         if (project) {
             project.data1 = [{
@@ -74,7 +74,7 @@ exports.postContent = async (req, res) => {
             await project.save();
             return res.json({ success: true, message: "Amenity Content Updated Successfully" });
         } else {
-            const newProject = new UserModel({
+            const newProject = new ProjectAmenitiesModel({
                 projectname,
                 data1: [{
                     amenityContent

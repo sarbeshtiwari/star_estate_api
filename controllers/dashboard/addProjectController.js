@@ -3,6 +3,13 @@ const fs = require('fs');
 const path = require('path');
 const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
 const BannerImage = require('../../models/projectBannerImageModel');
+const UserModel = require('../../models/dashboard/quickDetailsModel');
+const ContentModel = require('../../models/dashboard/projectContentSEOModel');
+const WalkthroughModel = require('../../models/dashboard/projectBrochureWalkthroughModel');
+const ProjectAmenitiesModel = require('../../models/dashboard/projectAmenitiesModel');
+const { FloorPlanModel } = require('../../models/dashboard/projectFloorPlanModel');
+const { ProjectsGallery } = require('../../models/dashboard/projectGalleryModel');
+const ProjectLocationModel = require('../../models/dashboard/projectLocationAdvantagesModel');
 
 
 
@@ -49,13 +56,14 @@ exports.addProject = async (req, res) => {
             residential_priority,
             commercial_priority,
             project_status,
+
             status,
             property_type
         } = req.body;
 
         if (!projectName || !projectAddress || !cityLocation || !projectLocality ||
             !projectConfiguration || !projectBy || !projectPrice ||
-            !rera_no || !project_status.length || !property_type) {
+            !rera_no || !property_type) {
             return res.status(400).json({ message: 'Required fields are missing' });
         }
 
@@ -72,6 +80,7 @@ exports.addProject = async (req, res) => {
             project_logo: req.files.project_logo[0].filename,
             project_thumbnail: req.files.project_thumbnail[0].filename,
             rera_qr: req.files.rera_qr[0].filename,
+            locationMap: req.files.locationMap[0].filename,
             // project_logo: req.file ? req.file.path : null,
             // project_thumbnail: req.file ? req.file.path : null
         });
@@ -134,6 +143,9 @@ exports.updateProject = async (req, res) => {
             if (req.files.project_logo && req.files.project_logo[0]) {
                 updateData.project_logo = req.files.project_logo[0].filename;
             }
+            if (req.files.locationMap && req.files.locationMap[0]) {
+                updateData.locationMap = req.files.locationMap[0].filename;
+            }
         }
         const updatedProject = await Project.findByIdAndUpdate(req.params.id, updateData, { new: true });
         if (!updatedProject) {
@@ -172,6 +184,82 @@ exports.updateProjectStatus = async (req, res) => {
             if (!activeBannerImage) {
                 return res.status(400).json({ success: false, message: "No active banner image found. Please activate at least one banner image before updating the project status." });
             }
+
+            //quick Details
+            const quickDetails = await UserModel.find({ projectname: slugURL });
+            if (quickDetails.length === 0) {
+                return res.status(400).json({ success: false, message: "No quick details found. Please add it first"});
+            }
+            const activeQuickDetails = quickDetails.find(details => details.status === true);
+            if (!activeQuickDetails) {
+                return res.status(400).json({ success: false, message: "No active quick details found. Please activate atleast one to update project status."});
+            }
+
+            //description
+            const description = await ContentModel.find({ projectname: slugURL });
+            if (description.length === 0) {
+                return res.status(400).json({ success: false, message: "No Description details found. Please add it first"});
+            }
+            const activeDescription = description.find(details => details.status === true);
+            if (!activeDescription) {
+                return res.status(400).json({ success: false, message: "No active Description found. Please activate atleast one to update project status."});
+            }
+
+             //walkthrough
+             const walkthrough = await WalkthroughModel.find({ projectname: slugURL });
+             if (walkthrough.length === 0) {
+                 return res.status(400).json({ success: false, message: "No Walkthrough details found. Please add it first"});
+             }
+             const activeWalkthrough = walkthrough.find(details => details.status === true);
+             if (!activeWalkthrough) {
+                 return res.status(400).json({ success: false, message: "No active Walkthrough detail found. Please activate atleast one to update project status."});
+             }
+
+             //amenitites
+            const amenities = await ProjectAmenitiesModel.find({ projectname: slugURL });
+             if (amenities.length === 0) {
+                return res.status(400).json({ success: false, message: "No Amenities details found. Please add it first"});
+            }
+            const activeAmenities = amenities.some(amenity => 
+                amenity.data.some(detail => detail.status === true)
+            );
+            if (!activeAmenities) {
+                return res.status(400).json({ success: false, message: "No active Amenities detail found. Please activate atleast one to update project status."});
+            }
+
+             //floorPlan
+             const floorPlan = await FloorPlanModel.find({ projectname: slugURL });
+             if (floorPlan.length === 0) {
+                return res.status(400).json({ success: false, message: "No Floor Plan details found. Please add it first"});
+            }
+            const activeFloorPlan = floorPlan.find(details => details.status === true);
+            if (!activeFloorPlan) {
+                return res.status(400).json({ success: false, message: "No active Floor Plan detail found. Please activate atleast one to update project status."});
+            }
+
+              //gallery
+              const gallery = await ProjectsGallery.find({ projectname: slugURL });
+              if (gallery.length === 0) {
+                 return res.status(400).json({ success: false, message: "No Gallery Image details found. Please add it first"});
+             }
+             const activeGallery = gallery.find(details => details.status === true);
+             if (!activeGallery) {
+                 return res.status(400).json({ success: false, message: "No active Gallery Image detail found. Please activate atleast one to update project status."});
+             }
+
+             //locationAdvantages
+             const locationAdvantages = await ProjectLocationModel.find({ projectname: slugURL });
+             if (locationAdvantages.length === 0) {
+                return res.status(400).json({ success: false, message: "No Location Advantages details found. Please add it first"});
+            }
+            const activeLocationAdvantages = locationAdvantages.some(location => 
+                location.data.some(detail => detail.status === true)
+            );
+            if (!activeLocationAdvantages) {
+                return res.status(400).json({ success: false, message: "No active Location Advantages detail found. Please activate atleast one to update project status."});
+            }
+
+
         };
 
         
@@ -223,6 +311,15 @@ exports.deleteProject = async (req, res) => {
             //     fs.unlinkSync(imagePath);
             // }
         }
+        if (project.project_thumbnail) {
+            await deleteFromCloudinary(project.project_thumbnail);
+        }
+        if (project.rera_qr) {
+            await deleteFromCloudinary(project.rera_qr);
+        }
+        if (project.locationMap){
+            await deleteFromCloudinary(project.locationMap);
+        }
         await Project.findByIdAndDelete(req.params.id);
         res.json({ success: true, message: "Project and associated image deleted successfully" });
     } catch (error) {
@@ -230,6 +327,88 @@ exports.deleteProject = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
+
+
+exports.getProjectByCity = async (req, res) => {
+    try {
+        const { cityLocation } = req.params;
+        const projects = await Project.find({ cityLocation });
+        if (projects.length === 0) {
+            return res.status(404).json({ message: "No projects found for this Location" });
+        }
+        res.json(projects);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.getProjectByDeveloper = async (req, res) => {
+    try {
+        const { slugURL } = req.params;
+        const projects = await Project.find({ projectBy: slugURL });
+        if (projects.length === 0) {
+            return res.status(404).json({ message: "No projects found for this Location" });
+        }
+        res.json(projects);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.updateShowSimilarProp = async (req, res) => {
+ 
+        const { id } = req.params;
+    const { status } = req.body;
+
+    if (typeof status !== 'boolean') {
+        return res.status(400).json({ success: false, message: "Status must be a boolean value (true or false)" });
+    }
+
+    try {
+        const updatedFAQ = await Project.findByIdAndUpdate(id, {showSimilarProperties: status }, { new: true });
+        if (!updatedFAQ) {
+            return res.status(404).json({ success: false, message: "FAQ not found" });
+        }
+        res.json({ success: true, message: "FAQ status updated successfully", updatedFAQ });
+    } catch (err) {
+        console.error(err);
+        if (err instanceof mongoose.Error) {
+            const { errors } = err;
+            const formattedErrors = Object.values(errors).map(error => error.message);
+            return res.status(400).json({ success: false, message: formattedErrors });
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    }
+};
+
+
+exports.getProjectBySlug = async (req, res) => {
+    const { slugURL } = req.params;
+
+    if (!slugURL || typeof slugURL !== 'string') {
+        return res.status(400).send("Invalid URL");
+    }
+
+    try {
+        const contentSEO = await Project.find({ slugURL: slugURL });
+
+        if (contentSEO.length === 0) {
+            return res.status(404).send("No Data found for the given project Name");
+        }
+
+        res.json(contentSEO);
+    } catch (err) {
+        console.error('Database query error:', err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
+// May be not required
 
 exports.updateProjectStatusCategory = async (req, res) => {
     try {
@@ -255,19 +434,6 @@ exports.updateProjectStatusCategory = async (req, res) => {
     }
 };
 
-exports.getProjectByCity = async (req, res) => {
-    try {
-        const { cityLocation } = req.params;
-        const projects = await Project.find({ cityLocation });
-        if (projects.length === 0) {
-            return res.status(404).json({ message: "No projects found for this Location" });
-        }
-        res.json(projects);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
-};
 
 exports.getLuxuryProject = async (req, res) => {
     try {
@@ -283,23 +449,3 @@ exports.getLuxuryProject = async (req, res) => {
     }
 };
 
-exports.getProjectBySlug = async (req, res) => {
-    const { slugURL } = req.params;
-
-    if (!slugURL || typeof slugURL !== 'string') {
-        return res.status(400).send("Invalid URL");
-    }
-
-    try {
-        const contentSEO = await Project.find({ slugURL: slugURL });
-
-        if (contentSEO.length === 0) {
-            return res.status(404).send("No Data found for the given project Name");
-        }
-
-        res.json(contentSEO);
-    } catch (err) {
-        console.error('Database query error:', err);
-        res.status(500).send("Internal Server Error");
-    }
-};

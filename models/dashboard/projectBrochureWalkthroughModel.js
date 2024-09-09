@@ -7,6 +7,6 @@ const UserSchema = new mongoose.Schema({
     status: { type: Boolean, default: false }
 });
 
-const UserModel = mongoose.model("projects_Brochure_Walkthrough", UserSchema);
+const WalkthroughModel = mongoose.model("projects_Brochure_Walkthrough", UserSchema);
 
-module.exports = UserModel;
+module.exports = WalkthroughModel;

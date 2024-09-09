@@ -18,6 +18,6 @@ const UserSchema = new mongoose.Schema({
     data1: [contentSchema]
 });
 
-const UserModel = mongoose.model("projects_LocationAdvantages", UserSchema);
+const ProjectLocationModel = mongoose.model("projects_LocationAdvantages", UserSchema);
 
-module.exports = UserModel;
+module.exports = ProjectLocationModel;

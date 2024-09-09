@@ -15,6 +15,6 @@ const UserSchema = new mongoose.Schema({
     data1: [contentSchema]
 });
 
-const UserModel = mongoose.model("projects_amenities", UserSchema);
+const ProjectAmenitiesModel = mongoose.model("projects_amenities", UserSchema);
 
-module.exports = UserModel;
+module.exports = ProjectAmenitiesModel;

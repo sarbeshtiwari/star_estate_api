@@ -106,6 +106,16 @@ exports.updateProjectGalleryHomeStatus = async (req, res) => {
     }
 
     try {
+        // If setting the current item's displayHome to true, ensure no other items are true
+        if (displayHome === true) {
+            // Find and update the item where displayHome is currently true
+            await ProjectsGallery.updateMany(
+                { displayHome: true },
+                { displayHome: false }
+            );
+        }
+
+        // Update the current item
         const updatedData = await ProjectsGallery.findByIdAndUpdate(id, { displayHome }, { new: true });
 
         if (!updatedData) {
@@ -125,6 +135,7 @@ exports.updateProjectGalleryHomeStatus = async (req, res) => {
         }
     }
 };
+
 
 // Delete data
 exports.deleteProjectGallery = async (req, res) => {
