@@ -321,6 +321,7 @@ exports.updateSubCity = async (req, res) => {
         if (!existingSubCity) {
             return res.status(404).json({ success: false, message: "Sub City not found" });
         }
+        existingSubCity.priority = priority || existingSubCity.priority;
 
         // Handle image update
         const imagePath = file ? file.path : null;

@@ -165,6 +165,7 @@ exports.updateCity = async (req, res) => {
         if (!existingCity) {
             return res.status(404).json({ success: false, message: "City not found" });
         }
+        existingCity.priority = priority || existingCity.priority;
 
         // Prepare updated data
         const imagePath = file ? file.path : null;
@@ -215,6 +216,46 @@ exports.getCityBySlugURL = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
+exports.getCityImage = async (req, res) => {
+    try {
+        // Query to find all cities with location_type as 'common'
+        const cities = await City.find(
+            {
+                'data.location_type': 'common' // Filtering for 'common' location_type
+            },
+            
+        );
+
+        // If no cities are found, return 404
+        if (!cities.length) {
+            return res.status(404).json({ error: 'No cities or types found' });
+        }
+
+        // Extract image for each city
+        const citiesWithImages = cities.map(city => {
+            // Attempt to find the data entry with 'location_type' as 'common'
+            const commonData = city.data.find(d => d.location_type === 'common');
+
+            return {
+                location: city.location,
+                slugURL: city.slugURL,
+                state: city.state,
+                priority: city.priority,
+                status: city.status,
+                image: commonData ? commonData.image || null : null // Safely retrieve the image or return null if not found
+            };
+        });
+
+        // Respond with the cities and their images
+        res.json(citiesWithImages);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
 
 
 // exports.updateCity = async (req, res) => {

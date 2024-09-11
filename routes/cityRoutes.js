@@ -15,4 +15,6 @@ router.put('/updateCity/:cityId/:location_type', uploadCity.single('image'), cit
 
 router.get('/getCityByState/:state', cityController.getCityByState);
 
+router.get('/getCityWithImage', cityController.getCityImage);
+
 module.exports = router;
