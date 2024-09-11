@@ -4,7 +4,7 @@ const path = require('path');
 const deleteFromCloudinary = require('../../middlewares/delete_cloudinery_image');
 const {GalleryContentModel} = require('../../models/dashboard/projectGalleryModel');
 
-// Add Project Gallery
+
 exports.addProjectGallery = async (req, res) => {
     try {
         const ProjectGalleryArray = JSON.parse(req.body.data);
@@ -13,14 +13,21 @@ exports.addProjectGallery = async (req, res) => {
             return res.status(400).json({ success: false, message: "Request body must be an array of ProjectGallery" });
         }
 
-        ProjectGalleryArray.forEach((item, index) => {
-            if (req.files[index]) {
-                item.image = req.files[index].filename;
-            }
+        // Process files
+        const desktopImage = req.files['desktopImage'] ? req.files['desktopImage'][0] : null;
+        const mobileImage = req.files['mobileImage'] ? req.files['mobileImage'][0] : null;
+
+        // Add file paths to the gallery items
+        const updatedGalleryArray = ProjectGalleryArray.map(item => {
+            return {
+                ...item,
+                desktopImage: desktopImage ? desktopImage.filename : item.desktopImage,
+                mobileImage: mobileImage ? mobileImage.filename : item.mobileImage
+            };
         });
 
-        const newReports = ProjectGalleryArray.map(item => new ProjectsGallery(item));
-
+        // Create new documents and save them
+        const newReports = updatedGalleryArray.map(item => new ProjectsGallery(item));
         await ProjectsGallery.insertMany(newReports);
 
         res.json({ success: true, message: "Data added successfully" });
@@ -29,6 +36,7 @@ exports.addProjectGallery = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
 
 // Fetch all data
 exports.getProjectGallery = async (req, res) => {
@@ -147,9 +155,14 @@ exports.deleteProjectGallery = async (req, res) => {
         if (!deletedData) {
             return res.status(404).json({ success: false, message: "Data not found" });
         }
-        if (deletedData.image) {
+        if (deletedData.desktopImage) {
             
-            await deleteFromCloudinary(deletedData.image);
+            await deleteFromCloudinary(deletedData.desktopImage);
+           
+        }
+        if (deletedData.mobileImage) {
+            
+            await deleteFromCloudinary(deletedData.mobileImage);
            
         }
 
@@ -175,22 +188,30 @@ exports.updateProjectGallery = async (req, res) => {
         const updates = JSON.parse(req.body.data);
 
         if (!Array.isArray(updates)) {
-            return res.status(400).json({ success: false, message: "Request body must be an array of ProjectGallery" });
+            return res.status(400).json({ success: false, message: "Request body must be an array of Project Gallery" });
         }
 
         const existingProjectGallery = await ProjectsGallery.findById(id);
 
         if (!existingProjectGallery) {
-            return res.status(404).json({ success: false, message: "ProjectGallery not found" });
+            return res.status(404).json({ success: false, message: "Project Gallery not found" });
         }
 
-        updates.forEach((update, index) => {
-            if (req.files[index]) {
-                update.image = req.files[index].filename;
-            }
-        });
+        // Process uploaded files
+        const desktopImageFile = req.files['desktopImage'] ? req.files['desktopImage'][0] : null;
+        const mobileImageFile = req.files['mobileImage'] ? req.files['mobileImage'][0] : null;
 
+
+        // Update each entry
         for (const update of updates) {
+            if (desktopImageFile) {
+                update.desktopImage = desktopImageFile.filename;
+            }
+
+            if (mobileImageFile) {
+                update.mobileImage = mobileImageFile.filename;
+            }
+
             await ProjectsGallery.findByIdAndUpdate(id, update, { new: true, runValidators: true });
         }
 

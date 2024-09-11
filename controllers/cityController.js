@@ -50,13 +50,22 @@ const createSlug = (text) => {
 
 exports.getCities = async (req, res) => {
     try {
-        const cities = await City.find({});
+        const cities = await City.find({},
+            {
+                location: 1,
+                slugURL: 1,
+                state: 1,
+                priority: 1,
+                status: 1
+            }
+        );
         res.json(cities);
     } catch (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 exports.getCityByCityAndProjectType = async (req, res) => {
     const { location, location_type } = req.params;

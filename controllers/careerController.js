@@ -16,6 +16,11 @@ exports.createCareer = async (req, res) => {
      
         created_at, 
         note, 
+        utm_source,
+        utm_medium,
+        utm_campaign,
+        utm_term,
+        utm_content
     } = req.body;
 
     if (!Name || !phoneNumber || !req.file) {
@@ -23,7 +28,6 @@ exports.createCareer = async (req, res) => {
     }
 
     try {
-        console.log('trying')
         const newCareer = new CareerModel({
             Name, 
             Email, 
@@ -35,10 +39,15 @@ exports.createCareer = async (req, res) => {
             resume: req.file.filename,
             created_at, 
             note, 
+            utm_source,
+            utm_medium,
+            utm_campaign,
+            utm_term,
+            utm_content
         });
         console.log('send')
 
-        await sendCareerEmail(Name, Email, phoneNumber,  category, location);
+        await sendCareerEmail(Name, Email, phoneNumber,  category, location, utm_source, utm_medium, utm_campaign, utm_term, utm_content);
         console.log('done')
 
         await newCareer.save();

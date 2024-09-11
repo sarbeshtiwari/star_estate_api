@@ -2,13 +2,13 @@ const ContentModel = require('../../models/dashboard/projectContentSEOModel');
 
 // Add ContentSEO
 exports.addContentSEO = async (req, res) => {
-    const { description, schema, projectname, status } = req.body;
+    const { briefDescription, description, schema, projectname, status } = req.body;
     
     if (!description || !projectname) {
         return res.status(400).json({ success: false, message: "Fill the required field" });
     }
     
-    const newReport = new ContentModel({ description, schema, projectname, status });
+    const newReport = new ContentModel({ briefDescription, description, schema, projectname, status });
     
     try {
         console.log("New Data:", newReport);

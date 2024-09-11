@@ -1,4 +1,4 @@
-const { sendQueryEmail } = require('../middlewares/nodeMailer');
+const { sendQueryEmail, sendContactUsEmail } = require('../middlewares/nodeMailer');
 const ContactUSModel = require('../models/contactUSModel');
 
 
@@ -8,10 +8,14 @@ exports.createContactUS = async (req, res) => {
         Name, 
         Email, 
         phoneNumber, 
-         
         user_query,
         created_at, 
-        note, 
+        note,
+        utm_source,
+        utm_medium,
+        utm_campaign,
+        utm_term,
+        utm_content
     } = req.body;
 
     if (!Name || !phoneNumber || !user_query) {
@@ -23,13 +27,17 @@ exports.createContactUS = async (req, res) => {
             Name, 
             Email, 
             phoneNumber, 
-            
             user_query,
             created_at, 
-            note, 
+            note,
+            utm_source,
+            utm_medium,
+            utm_campaign,
+            utm_term,
+            utm_content
         });
 
-        await sendQueryEmail(Name, Email, phoneNumber, user_query)
+        await sendContactUsEmail(Name, Email, phoneNumber, user_query, utm_source, utm_medium, utm_campaign, utm_term, utm_content);
 
         await newQuery.save();
         res.json({ success: true, message: "Query added successfully" });

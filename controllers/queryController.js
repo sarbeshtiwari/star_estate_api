@@ -1,6 +1,7 @@
 const QueryModel = require('../models/queryModel');
 const path = require('path');
 const fs = require('fs');
+const { sendQueryEmail } = require('../middlewares/nodeMailer');
 
 // Create and Save a New Query
 exports.createQuery = async (req, res) => {
@@ -9,12 +10,17 @@ exports.createQuery = async (req, res) => {
         Email, 
         phoneNumber, 
         projectName, 
-        user_query,
+        // user_query,
         created_at, 
         note, 
+        utm_source,
+        utm_medium,
+        utm_campaign,
+        utm_term,
+        utm_content
     } = req.body;
 
-    if (!Name || !phoneNumber || !user_query) {
+    if (!Name || !phoneNumber) {
         return res.status(400).json({ success: false, message: "Name, Phone Number and User Query are required" });
     }
 
@@ -24,10 +30,17 @@ exports.createQuery = async (req, res) => {
             Email, 
             phoneNumber, 
             projectName, 
-            user_query,
+            // user_query,
             created_at, 
             note, 
+            utm_source,
+            utm_medium,
+            utm_campaign,
+            utm_term,
+            utm_content
         });
+
+        await sendQueryEmail(  Name, Email, phoneNumber, projectName, utm_source, utm_medium, utm_campaign, utm_term, utm_content)
 
         await newQuery.save();
         res.json({ success: true, message: "Query added successfully" });

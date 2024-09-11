@@ -22,16 +22,16 @@ exports.createDeveloper = async (req, res) => {
         metaKeyword, 
         metaDescription, 
         developerName, 
-        no_of_projects,
-        establishYear, 
-        ongoingProjects, 
-        experience, 
+        // no_of_projects,
+        // establishYear, 
+        // ongoingProjects, 
+        // experience, 
         developerPriority, 
         description, 
         status
     } = req.body;
 
-    if (!developerName || !no_of_projects || !establishYear) {
+    if (!developerName) {
         return res.status(400).json({ success: false, message: "Developer Name, No of Projects and Establish year are required" });
     }
 
@@ -48,12 +48,12 @@ exports.createDeveloper = async (req, res) => {
             metaKeyword, 
             metaDescription, 
             developerName, 
-            no_of_projects,
-            establishYear, 
-            ongoingProjects, 
-            experience, 
+            // no_of_projects,
+            // establishYear, 
+            // ongoingProjects, 
+            // experience, 
             developerPriority, 
-            developerLogo: req.file ? req.file.filename : null, 
+            // developerLogo: req.file ? req.file.filename : null, 
             description, 
             slugURL,
             status
@@ -112,9 +112,9 @@ exports.updateDeveloper = async (req, res) => {
     const developerId = req.params.id;
     const updateData = req.body;
 
-    if (req.file) {
-        updateData.developerLogo = req.file.filename;
-    }
+    // if (req.file) {
+    //     updateData.developerLogo = req.file.filename;
+    // }
 
     try {
         const updatedDeveloper = await DeveloperModel.findByIdAndUpdate(developerId, updateData, { new: true });
@@ -159,9 +159,9 @@ exports.deleteDeveloper = async (req, res) => {
             return res.status(404).json({ success: false, message: "Developer not found" });
         }
 
-        if (developer.developerLogo) {
-           await deleteFromCloudinary(developer.developerLogo);
-        }
+        // if (developer.developerLogo) {
+        //    await deleteFromCloudinary(developer.developerLogo);
+        // }
 
         await DeveloperModel.findByIdAndDelete(id);
         res.json({ success: true, message: "Developer and associated image deleted successfully" });

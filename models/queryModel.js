@@ -5,9 +5,14 @@ const QuerySchema = new mongoose.Schema({
     Email: { type: String, required: true },
     phoneNumber: { type: Number, required: true },
     projectName: { type: String, required: true },
-    user_query: { type: String, required: true },
+    // user_query: { type: String, required: false },
     created_at: { type: Date, required: true },
     note: { type: String, required: false },
+    utm_source: { type: String, required: false },
+    utm_medium: { type: String, required: false },
+    utm_campaign: { type: String, required: false },
+    utm_term: { type: String, required: false },
+    utm_content: { type: String, required: false }
 });
 
 const QueryModel = mongoose.model("user_query", QuerySchema);

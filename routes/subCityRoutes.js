@@ -11,5 +11,6 @@ router.get('/getSubCityByCity/:id', subCityController.getSubCityByID);
 router.put('/updateSubCityStatus/:id', subCityController.updateSubCityStatus);
 router.delete('/deleteSubCity/:id', subCityController.deleteSubCity);
 router.put('/updateSubCity/:subCityId/:content_type', uploadSubCity.single('image'), subCityController.updateSubCity);
+router.get('/data/:id', subCityController.data);
 
 module.exports = router;

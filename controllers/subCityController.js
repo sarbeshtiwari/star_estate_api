@@ -90,7 +90,13 @@ exports.getSubCityByID = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const subCity = await SubCity.find({city: id}).then(sub_cities => {
+        const subCity = await SubCity.find({city: id},  {
+            city: 1,
+            slugURL: 1,
+            sub_city: 1,
+            priority: 1,
+            status: 1
+        }).then(sub_cities => {
             if (sub_cities.length === 0) {
                 return res.status(404).json({ success: false, error: 'No sub cities found for this city ID' });
             }
@@ -145,6 +151,33 @@ exports.deleteSubCity = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
+exports.data = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const subCities = await SubCity.find(
+            { city: id },
+            {
+                city: 1,
+                slugURL: 1,
+                sub_city: 1,
+                priority: 1,
+                status: 1
+            }
+        );
+
+        if (subCities.length === 0) {
+            return res.status(404).json({ success: false, error: 'No sub cities found for this city ID' });
+        }
+
+        res.json(subCities);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
 
 
 

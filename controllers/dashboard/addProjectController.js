@@ -61,7 +61,7 @@ exports.addProject = async (req, res) => {
             property_type
         } = req.body;
 
-        if (!projectName || !projectAddress || !cityLocation || !projectLocality ||
+        if (!projectName || !projectAddress || !cityLocation ||
             !projectConfiguration || !projectBy || !projectPrice ||
             !rera_no || !property_type) {
             return res.status(400).json({ message: 'Required fields are missing' });
