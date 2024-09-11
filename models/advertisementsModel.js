@@ -6,7 +6,7 @@ const AdvertisementSchema = new mongoose.Schema({
     metaDescription: { type: String, required: false },
     advertisementType: { type: String, required: true },
     advertisementDate: { type: Date, required: true },
-    advertisementLocation: { type: String, required: true },
+    advertisementTitle: { type: String, required: true },
     videoURL: {type: String, required: false},
     advertisementImage: { type: String, required: false },
     status: { type: Boolean, default: false }
