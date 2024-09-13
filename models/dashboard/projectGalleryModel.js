@@ -8,6 +8,7 @@ const ProjectGallerySchema = new mongoose.Schema({
     mobileImage: {type: String, required: true},
     projectname: { type: String, required: true },
     displayHome: { type: Boolean, default: false },
+    amenityImage: { type: Boolean, default: false },
     status: { type: Boolean, default: false },
 });
 

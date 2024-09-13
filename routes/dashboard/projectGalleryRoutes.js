@@ -21,6 +21,8 @@ router.put('/updateProjectGalleryStatus/:id', projectGalleryController.updatePro
 // Update displayHome status
 router.put('/updateProjectGalleryHomeStatus/:id', projectGalleryController.updateProjectGalleryHomeStatus);
 
+router.put('/updateProjectGalleryAmenityStatus/:id', projectGalleryController.updateProjectGalleryAmenityStatus);
+
 // Delete data
 router.delete('/deleteProjectGallery/:id', projectGalleryController.deleteProjectGallery);
 

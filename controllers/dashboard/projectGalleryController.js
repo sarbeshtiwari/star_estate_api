@@ -144,6 +144,44 @@ exports.updateProjectGalleryHomeStatus = async (req, res) => {
     }
 };
 
+exports.updateProjectGalleryAmenityStatus = async (req, res) => {
+    const { id } = req.params;
+    const { amenityImage } = req.body;
+
+    if (typeof amenityImage !== 'boolean') {
+        return res.status(400).json({ success: false, message: "DisplayHome must be a boolean value (true or false)" });
+    }
+
+    try {
+        // If setting the current item's displayHome to true, ensure no other items are true
+        if (amenityImage === true) {
+            // Find and update the item where displayHome is currently true
+            await ProjectsGallery.updateMany(
+                { amenityImage: true },
+                { amenityImage: false }
+            );
+        }
+
+        // Update the current item
+        const updatedData = await ProjectsGallery.findByIdAndUpdate(id, { amenityImage }, { new: true });
+
+        if (!updatedData) {
+            return res.status(404).json({ success: false, message: "Data not found" });
+        }
+
+        res.json({ success: true, message: "Data amenityImage status updated successfully", updatedData });
+    } catch (err) {
+        console.error(err);
+
+        if (err instanceof mongoose.Error) {
+            const { errors } = err;
+            const formattedErrors = Object.values(errors).map(error => error.message);
+            return res.status(400).json({ success: false, message: formattedErrors });
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+    }
+};
 
 // Delete data
 exports.deleteProjectGallery = async (req, res) => {
