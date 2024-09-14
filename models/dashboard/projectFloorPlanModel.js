@@ -7,7 +7,7 @@ const FloorPlanSchema = new mongoose.Schema({
     areaRangeSqm: { type: String, required: true },
     image: { type: String, required: false },
     projectname: { type: String, required: true },
-    status: { type: Boolean, default: false }
+    status: { type: Boolean, default: true }
 });
 
 // Content Schema for FloorPlanContent

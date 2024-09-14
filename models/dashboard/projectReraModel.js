@@ -6,7 +6,7 @@ const ProjectReraSchema = new mongoose.Schema({
     reraWebsite: { type: String, required: true },
     image: { type: String, required: true },
     projectname: { type: String, required: true },
-    status: { type: Boolean, default: false },
+    status: { type: Boolean, default: true },
 });
 
 const ProjectsRera = mongoose.model('project_rera', ProjectReraSchema);

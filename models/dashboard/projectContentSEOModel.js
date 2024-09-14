@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
     description: { type: String, required: true },
     schema: { type: String, required: false },
     projectname: { type: String, required: true },
-    status: { type: Boolean, default: false }
+    status: { type: Boolean, default: true }
 });
 
 const ContentModel = mongoose.model("projects_ContentSEO", UserSchema);

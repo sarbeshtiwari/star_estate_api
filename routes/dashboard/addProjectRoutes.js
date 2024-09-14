@@ -3,6 +3,7 @@ const router = express.Router();
 const projectController = require('../../controllers/dashboard/addProjectController');
 const upload = require('../../middlewares/addProject_multerMiddlewares');
 const Project = require('../../models/dashboard/addProjectModel');
+const ProjectConfiguration = require('../../models/projectConfigurationModel');
 
 // Routes
 // router.post('/addProject', upload.single('project_logo'), projectController.addProject);
@@ -106,6 +107,68 @@ router.get('/projects', async (req, res) => {
         res.status(500).json({ success: false, message: "Server error" });
     }
 });
+
+router.get('/projectsConfig/:slug', async (req, res) => {
+    try {
+        const { slug } = req.params;
+
+        // Extract configuration and cityLocation using regex
+        const regex = /(\d+)-bhk.*-in-(.*)/i;
+        const match = slug.match(regex);
+
+        if (!match) {
+            return res.status(400).json({ success: false, message: 'Invalid slug format' });
+        }
+
+        const projectConfiguration = match[1]; // Extract the configuration number (e.g., 2 from 2-bhk)
+        const cityLocation = match[2]; // Extract the city name (e.g., mumbai)
+
+        // Call the getProjectConfigurationBySlugURL function
+        const cityData = await getProjectConfiguration(cityLocation, slug);
+
+        if (cityData.error) {
+            return res.status(404).json({ success: false, message: cityData.error });
+        }
+
+        // Search for projects with matching cityLocation and projectConfiguration
+        const projects = await Project.find({
+            cityLocation: new RegExp(cityLocation, 'i'), // case-insensitive search
+            projectConfiguration: new RegExp(projectConfiguration, 'i') // flexible search
+        });
+
+        if (!projects.length) {
+            return res.status(404).json({ success: false, message: 'No projects found' });
+        }
+
+        res.status(200).json({ success: true, cityData, projects });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+});
+
+
+const getProjectConfiguration = async (cityLocation, slugURL) => {
+    try {
+        console.log(cityLocation, slugURL)
+        const projectConfiguration = await ProjectConfiguration.find({
+            location: cityLocation,
+            slugURL: slugURL
+        });
+
+        if (!projectConfiguration.length) {
+            return { error: 'Project Configuration or type not found' };
+        }
+        if (projectConfiguration[0].status === false) {
+            return '';
+        }
+
+        return projectConfiguration;
+    } catch (err) {
+        console.error(err);
+        throw new Error("Internal Server Error");
+    }
+};
+
 
 
 module.exports = router;

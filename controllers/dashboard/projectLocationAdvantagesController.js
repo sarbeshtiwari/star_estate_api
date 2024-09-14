@@ -52,6 +52,7 @@ const ProjectLocationModel = require('../../models/dashboard/projectLocationAdva
 exports.postLocationAdvantages = async (req, res) => {
     const { id } = req.params;
     const { projectname, status, title, proximity, unit } = req.body;
+    console.log(req.body)
 
     if (typeof status !== 'boolean') {
         return res.status(400).json({ success: false, message: "Status must be a boolean value (true or false)" });

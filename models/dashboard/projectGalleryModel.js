@@ -9,7 +9,7 @@ const ProjectGallerySchema = new mongoose.Schema({
     projectname: { type: String, required: true },
     displayHome: { type: Boolean, default: false },
     amenityImage: { type: Boolean, default: false },
-    status: { type: Boolean, default: false },
+    status: { type: Boolean, default: true },
 });
 
 // Content Schema for Gallery Content

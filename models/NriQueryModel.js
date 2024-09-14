@@ -4,9 +4,8 @@ const QuerySchema = new mongoose.Schema({
     Name: { type: String, required: true },
     Email: { type: String, required: true },
     phoneNumber: { type: Number, required: true },
-    projectName: { type: String, required: true },
-    // user_query: { type: String, required: false },
-    created_at: { type: Date, default: Date.now, required: false },
+    user_query: { type: String, required: false },
+    created_at: { type: Date, default: Date.now,  required: false },
     note: { type: String, required: false },
     utm_source: { type: String, required: false },
     utm_medium: { type: String, required: false },
@@ -15,6 +14,6 @@ const QuerySchema = new mongoose.Schema({
     utm_content: { type: String, required: false }
 });
 
-const QueryModel = mongoose.model("user_query", QuerySchema);
+const NRIQueryModel = mongoose.model("nri_query", QuerySchema);
 
-module.exports = QueryModel;
+module.exports = NRIQueryModel;

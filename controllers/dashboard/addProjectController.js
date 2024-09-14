@@ -300,16 +300,18 @@ exports.updateProjectStatus = async (req, res) => {
 
 exports.deleteProject = async (req, res) => {
     try {
+        // Find the project by ID
         const project = await Project.findById(req.params.id);
         if (!project) {
             return res.status(404).json({ success: false, message: "Project not found" });
         }
+        
+        // Get the project slug URL
+        const projectSlugURL = project.slugURL;
+        
+        // Delete project logo, thumbnail, RERA QR, and location map from Cloudinary (if they exist)
         if (project.project_logo) {
-            // const imagePath = path.join(__dirname, '../uploads/projects', project.project_logo);
             await deleteFromCloudinary(project.project_logo);
-            // if (fs.existsSync(imagePath)) {
-            //     fs.unlinkSync(imagePath);
-            // }
         }
         if (project.project_thumbnail) {
             await deleteFromCloudinary(project.project_thumbnail);
@@ -317,18 +319,54 @@ exports.deleteProject = async (req, res) => {
         if (project.rera_qr) {
             await deleteFromCloudinary(project.rera_qr);
         }
-        if (project.locationMap){
+        if (project.locationMap) {
             await deleteFromCloudinary(project.locationMap);
         }
+
+        // 1. Delete Banner Images and remove from Cloudinary
+        const bannerImages = await BannerImage.find({ projectName: projectSlugURL });
+        for (const banner of bannerImages) {
+            if (banner.imageUrl) {
+                await deleteFromCloudinary(banner.imageUrl); // Assuming banner.imageUrl stores the image path in Cloudinary
+            }
+        }
+        await BannerImage.deleteMany({ projectName: projectSlugURL });
+
+        // 2. Delete Floor Plans and remove from Cloudinary
+        const floorPlans = await FloorPlanModel.find({ projectname: projectSlugURL });
+        for (const floorPlan of floorPlans) {
+            if (floorPlan.imageUrl) {
+                await deleteFromCloudinary(floorPlan.imageUrl); // Assuming floorPlan.imageUrl stores the image path in Cloudinary
+            }
+        }
+        await FloorPlanModel.deleteMany({ projectname: projectSlugURL });
+
+        // 3. Delete Gallery Images and remove from Cloudinary
+        const galleryImages = await ProjectsGallery.find({ projectname: projectSlugURL });
+        for (const gallery of galleryImages) {
+            if (gallery.imageUrl) {
+                await deleteFromCloudinary(gallery.imageUrl); // Assuming gallery.imageUrl stores the image path in Cloudinary
+            }
+        }
+        await ProjectsGallery.deleteMany({ projectname: projectSlugURL });
+
+        // Delete other related documents (without images)
+        await UserModel.deleteMany({ projectname: projectSlugURL });
+        await ContentModel.deleteMany({ projectname: projectSlugURL });
+        await WalkthroughModel.deleteMany({ projectname: projectSlugURL });
+        await ProjectAmenitiesModel.deleteMany({ projectname: projectSlugURL });
+        await ProjectLocationModel.deleteMany({ projectname: projectSlugURL });
+
+        // Finally, delete the project itself
         await Project.findByIdAndDelete(req.params.id);
-        res.json({ success: true, message: "Project and associated image deleted successfully" });
+
+        res.json({ success: true, message: "Project and all related documents (including images) deleted successfully" });
+
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }
 };
-
-
 
 exports.getProjectByCity = async (req, res) => {
     try {

@@ -1,35 +1,45 @@
-const { sendLuxuryQueryEmail } = require('../middlewares/nodeMailer');
-const LuxuryProjectsModel = require('../models/luxuryProjectsModel');
+// const { sendNRIQueryEmail } = require('../middlewares/nodeMailer');
+const NRIQueryModel = require('../models/NriQueryModel');
 
 
 // Create and Save a New Query
-exports.createLuxuryProjects = async (req, res) => {
+exports.createNRIQuery = async (req, res) => {
     const {
         Name, 
         Email, 
         phoneNumber, 
-        projectName,
+      
         user_query,
         created_at, 
         note,
+        utm_source,
+        utm_medium,
+        utm_campaign,
+        utm_term,
+        utm_content
     } = req.body;
 
-    if (!Name || !phoneNumber || !user_query) {
-        return res.status(400).json({ success: false, message: "Name, Phone Number and User Query are required" });
+    if (!Name || !phoneNumber) {
+        return res.status(400).json({ success: false, message: "Name, Phone Number are required" });
     }
 
     try {
-        const newQuery = new LuxuryProjectsModel({
+        const newQuery = new NRIQueryModel({
             Name, 
             Email, 
             phoneNumber, 
-            projectName,
+           
             user_query,
             created_at, 
             note, 
+            utm_source,
+            utm_medium,
+            utm_campaign,
+            utm_term,
+            utm_content
         });
 
-        await sendLuxuryQueryEmail(Name, Email, phoneNumber, projectName, user_query);
+        // await sendNRIQueryEmail(Name, Email, phoneNumber, projectName, user_query,  utm_source,  utm_medium,  utm_campaign, utm_term, utm_content);
 
         await newQuery.save();
         res.json({ success: true, message: "Data added successfully" });
@@ -40,9 +50,9 @@ exports.createLuxuryProjects = async (req, res) => {
 };
 
 // Fetch all Query
-exports.getLuxuryProjects = async (req, res) => {
+exports.getNRIQuery = async (req, res) => {
     try {
-        const Query = await LuxuryProjectsModel.find({});
+        const Query = await NRIQueryModel.find({});
         res.json(Query);
     } catch (err) {
         console.error(err);
@@ -50,14 +60,14 @@ exports.getLuxuryProjects = async (req, res) => {
     }
 };
 
-// Update a LuxuryProjects by ID
-exports.updateLuxuryProjects = async (req, res) => {
+// Update a NRIQuery by ID
+exports.updateNRIQuery = async (req, res) => {
     const Id = req.params.id;
     const { note } = req.body;
 
     try {
         // Use findByIdAndUpdate with upsert option to create a new document if it does not exist
-        const updatedQuery = await LuxuryProjectsModel.findByIdAndUpdate(
+        const updatedQuery = await NRIQueryModel.findByIdAndUpdate(
             Id,
             { $set: { note } }, // $set operator ensures only 'note' field is updated
             { new: true, upsert: true } // upsert creates a new document if one doesn't exist
@@ -72,16 +82,16 @@ exports.updateLuxuryProjects = async (req, res) => {
 
 
 // Delete a Query
-exports.deleteLuxuryProjects = async (req, res) => {
+exports.deleteNRIQuery = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const Query = await LuxuryProjectsModel.findById(id);
+        const Query = await NRIQueryModel.findById(id);
         if (!Query) {
             return res.status(404).json({ success: false, message: "Query not found" });
         }
 
-        await LuxuryProjectsModel.findByIdAndDelete(id);
+        await NRIQueryModel.findByIdAndDelete(id);
         res.json({ success: true, message: "Data deleted successfully" });
     } catch (err) {
         console.error("Delete Error:", err);

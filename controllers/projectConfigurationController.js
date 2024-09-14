@@ -141,7 +141,7 @@ exports.getProjectConfigurationBySlugURL = async (req, res) => {
     try {
         const projectConfiguration = await ProjectConfiguration.find({
             location: location,
-            'data.slugURL': slugURL
+            slugURL: slugURL
         });
 
         if (!projectConfiguration.length) {

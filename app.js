@@ -33,7 +33,7 @@ const cityRoutes = require('./routes/cityRoutes');
 const subCityRoutes = require('./routes/subCityRoutes');
 const userQueryRoutes = require('./routes/queryRoutes');
 const contactUS = require('./routes/contactUSRoutes');
-const luxuryProjects = require('./routes/luxuryProjectsRoutes');
+const NRIQuery = require('./routes/NriQueryRoutes');
 const careerQuery = require('./routes/careerRoutes');
 const cityConfigurationRoutes = require('./routes/projectConfigurationRoutes')
 const bannerImageRoutes = require('./routes/bannerImage');
@@ -114,7 +114,7 @@ app.use('/clientSpeak', clientSpeak);
 
 app.use('/userQuery', userQueryRoutes);
 app.use('/contactUS', contactUS);
-app.use('/luxuryProjects', luxuryProjects);
+app.use('/NRIQuery', NRIQuery);
 app.use('/careerQuery', careerQuery);
 
 
