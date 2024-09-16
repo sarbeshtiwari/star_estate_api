@@ -1,4 +1,5 @@
 // const { sendNRIQueryEmail } = require('../middlewares/nodeMailer');
+const { sendNRIQueryEmail } = require('../middlewares/nodeMailer');
 const NRIQueryModel = require('../models/NriQueryModel');
 
 
@@ -11,7 +12,7 @@ exports.createNRIQuery = async (req, res) => {
       
         user_query,
         created_at, 
-        note,
+        // note,
         utm_source,
         utm_medium,
         utm_campaign,
@@ -29,17 +30,17 @@ exports.createNRIQuery = async (req, res) => {
             Email, 
             phoneNumber, 
            
-            user_query,
+            user_query: user_query ? user_query : 'N/A',
             created_at, 
-            note, 
-            utm_source,
-            utm_medium,
-            utm_campaign,
-            utm_term,
-            utm_content
+            // note, 
+            utm_source: utm_source ? utm_source : 'N/A',
+            utm_medium: utm_medium ? utm_medium : 'N/A',
+            utm_campaign: utm_campaign ? utm_campaign : 'N/A',
+            utm_term: utm_term ? utm_term : 'N/A',
+            utm_content : utm_content ? utm_content : 'N/A'
         });
 
-        // await sendNRIQueryEmail(Name, Email, phoneNumber, projectName, user_query,  utm_source,  utm_medium,  utm_campaign, utm_term, utm_content);
+        await sendNRIQueryEmail(Name, Email, phoneNumber, user_query,  utm_source,  utm_medium,  utm_campaign, utm_term, utm_content);
 
         await newQuery.save();
         res.json({ success: true, message: "Data added successfully" });
@@ -61,24 +62,24 @@ exports.getNRIQuery = async (req, res) => {
 };
 
 // Update a NRIQuery by ID
-exports.updateNRIQuery = async (req, res) => {
-    const Id = req.params.id;
-    const { note } = req.body;
+// exports.updateNRIQuery = async (req, res) => {
+//     const Id = req.params.id;
+//     const { note } = req.body;
 
-    try {
-        // Use findByIdAndUpdate with upsert option to create a new document if it does not exist
-        const updatedQuery = await NRIQueryModel.findByIdAndUpdate(
-            Id,
-            { $set: { note } }, // $set operator ensures only 'note' field is updated
-            { new: true, upsert: true } // upsert creates a new document if one doesn't exist
-        );
+//     try {
+//         // Use findByIdAndUpdate with upsert option to create a new document if it does not exist
+//         const updatedQuery = await NRIQueryModel.findByIdAndUpdate(
+//             Id,
+//             { $set: { note } }, // $set operator ensures only 'note' field is updated
+//             { new: true, upsert: true } // upsert creates a new document if one doesn't exist
+//         );
 
-        res.json({ success: true, message: "Data updated successfully", updatedQuery });
-    } catch (err) {
-        console.error("Update Error:", err);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
-    }
-};
+//         res.json({ success: true, message: "Data updated successfully", updatedQuery });
+//     } catch (err) {
+//         console.error("Update Error:", err);
+//         res.status(500).json({ success: false, message: "Internal Server Error" });
+//     }
+// };
 
 
 // Delete a Query

@@ -49,13 +49,15 @@ router.delete('/delete/:id', async (req, res) => {
         if (!banner) {
             return res.status(404).json({ error: 'Banner not found' });
         }
-        if (banner.desktop_image_url || banner.tablet_image_url || banner.mobile_image_url) {
+        if (banner.desktop_image_url) {
             await deleteFromCloudinary(banner.desktop_image_url);
+            // await deleteFromCloudinary(banner.tablet_image_url);
+            // await deleteFromCloudinary(banner.mobile_image_url);          
+        };
+        if (banner.tablet_image_url){
             await deleteFromCloudinary(banner.tablet_image_url);
-            await deleteFromCloudinary(banner.mobile_image_url);
-
-          
-        }
+        };
+        if (banner.mobile_image_url){await deleteFromCloudinary(banner.mobile_image_url);};
 
         await BannerImage.findByIdAndDelete(req.params.id);
         res.status(200).json({ success: true, message: 'Banner deleted successfully' });

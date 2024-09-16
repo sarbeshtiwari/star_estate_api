@@ -15,12 +15,12 @@ exports.createCareer = async (req, res) => {
         job_type,
      
         created_at, 
-        note, 
-        utm_source,
-        utm_medium,
-        utm_campaign,
-        utm_term,
-        utm_content
+        // note, 
+        // utm_source,
+        // utm_medium,
+        // utm_campaign,
+        // utm_term,
+        // utm_content
     } = req.body;
 
     if (!Name || !phoneNumber || !req.file) {
@@ -38,16 +38,18 @@ exports.createCareer = async (req, res) => {
             job_type,
             resume: req.file.filename,
             created_at, 
-            note, 
-            utm_source,
-            utm_medium,
-            utm_campaign,
-            utm_term,
-            utm_content
+            // note, 
+            // utm_source,
+            // utm_medium,
+            // utm_campaign,
+            // utm_term,
+            // utm_content
         });
         console.log('send')
 
-        await sendCareerEmail(Name, Email, phoneNumber,  category, location, utm_source, utm_medium, utm_campaign, utm_term, utm_content);
+        await sendCareerEmail(Name, Email, phoneNumber,  category, location, 
+            // utm_source, utm_medium, utm_campaign, utm_term, utm_content
+        );
         console.log('done')
 
         await newCareer.save();

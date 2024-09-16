@@ -31,6 +31,7 @@ router.put('/updateProjectStatusCategory/:id', projectController.updateProjectSt
 
 router.get('/getProjectByLocation/:cityLocation', projectController.getProjectByCity);
 router.get('/getLuxuryProject', projectController.getLuxuryProject);
+router.get('/getNewProject', projectController.getNewProject);
 
 router.get('/getProjectBySlug/:slugURL', projectController.getProjectBySlug);
 router.get('/getProjectByDeveloper/:slugURL', projectController.getProjectByDeveloper);
@@ -107,6 +108,8 @@ router.get('/projects', async (req, res) => {
         res.status(500).json({ success: false, message: "Server error" });
     }
 });
+
+//sitemap
 
 router.get('/projectsConfig/:slug', async (req, res) => {
     try {

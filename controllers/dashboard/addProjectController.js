@@ -487,3 +487,18 @@ exports.getLuxuryProject = async (req, res) => {
     }
 };
 
+exports.getNewProject = async (req, res) => {
+    try {
+        const projects = await Project.find({});
+        const newProjects = projects.filter(project => 
+            (project.newLaunch_priority !== null && project.newLaunch_priority !== 0) || 
+            (project.project_status && project.project_status.includes('new-launch'))
+        );
+        res.json(luxuryProjects);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+

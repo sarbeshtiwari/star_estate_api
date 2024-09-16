@@ -6,7 +6,7 @@ const NRIQueryController = require('../controllers/NriQueryController');
 router.post('/addNRIQuery', NRIQueryController.createNRIQuery);
 router.get('/getNRIQuery', NRIQueryController.getNRIQuery);
 router.delete('/deleteNRIQuery/:id', NRIQueryController.deleteNRIQuery);
-router.put('/updateNRIQuery/:id', NRIQueryController.updateNRIQuery);
+// router.put('/updateNRIQuery/:id', NRIQueryController.updateNRIQuery);
 
 
 module.exports = router;

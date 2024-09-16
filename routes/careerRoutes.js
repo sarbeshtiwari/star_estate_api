@@ -7,7 +7,7 @@ const upload = require('../middlewares/careerQuery_multerMiddlewares');
 router.post('/addCareer', upload.single('resume'),  careerController.createCareer);
 router.get('/getCareer', careerController.getCareer);
 router.delete('/deleteCareer/:id', careerController.deleteCareer);
-router.put('/updateCareer/:id', careerController.updateCareer);
+// router.put('/updateCareer/:id', careerController.updateCareer);
 
 
 module.exports = router;

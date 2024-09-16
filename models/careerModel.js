@@ -9,12 +9,12 @@ const CareerSchema = new mongoose.Schema({
     job_type: { type: String, required: true },
     resume: { type: String, required: true },
     created_at: { type: Date, default: Date.now, required: false },
-    note: { type: String, required: false },
-    utm_source: { type: String, required: false },
-    utm_medium: { type: String, required: false },
-    utm_campaign: { type: String, required: false },
-    utm_term: { type: String, required: false },
-    utm_content: { type: String, required: false }
+    // note: { type: String, required: false },
+    // utm_source: { type: String, required: false },
+    // utm_medium: { type: String, required: false },
+    // utm_campaign: { type: String, required: false },
+    // utm_term: { type: String, required: false },
+    // utm_content: { type: String, required: false }
 });
 
 const CareerModel = mongoose.model("career_query", CareerSchema);
