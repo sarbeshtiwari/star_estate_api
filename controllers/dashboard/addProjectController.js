@@ -494,7 +494,7 @@ exports.getNewProject = async (req, res) => {
             (project.newLaunch_priority !== null && project.newLaunch_priority !== 0) || 
             (project.project_status && project.project_status.includes('new-launch'))
         );
-        res.json(luxuryProjects);
+        res.json(newProjects);
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
