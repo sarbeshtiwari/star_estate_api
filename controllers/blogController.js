@@ -70,7 +70,7 @@ exports.createBlog = async (req, res) => {
 // Fetch all blogs
 exports.getBlogs = async (req, res) => {
     try {
-        const blogs = await BlogModel.find({});
+        const blogs = await BlogModel.find({}).sort({ blogsDate: -1 }); // Sort by blogsDate in descending order
         const formattedBlogs = blogs.map(blog => ({
             ...blog.toObject(),
             blogsDate: blog.blogsDate ? moment(blog.blogsDate).format('DD MMMM, YYYY') : null
@@ -81,6 +81,7 @@ exports.getBlogs = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 // Get a blog by ID
 exports.getBlogById = async (req, res) => {

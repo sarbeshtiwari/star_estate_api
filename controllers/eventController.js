@@ -56,7 +56,7 @@ exports.createEvent = async (req, res) => {
 
 exports.getEvents = async (req, res) => {
     try {
-        const events = await EventModel.find({});
+        const events = await EventModel.find({}).sort({ eventDate: -1 }); // Sort by eventDate in descending order
         const formattedEvents = events.map(event => ({
             ...event.toObject(),
             eventDate: moment(event.eventDate).format('DD MMMM, YYYY')
@@ -67,6 +67,7 @@ exports.getEvents = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 exports.getEventById = async (req, res) => {
     const { id } = req.params;
