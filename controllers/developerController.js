@@ -27,6 +27,7 @@ exports.createDeveloper = async (req, res) => {
         // ongoingProjects, 
         // experience, 
         developerPriority, 
+        briefContent,
         description, 
         status
     } = req.body;
@@ -54,6 +55,7 @@ exports.createDeveloper = async (req, res) => {
             // experience, 
             developerPriority, 
             // developerLogo: req.file ? req.file.filename : null, 
+            briefContent,
             description, 
             slugURL,
             status

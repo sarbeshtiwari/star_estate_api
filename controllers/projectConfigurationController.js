@@ -10,7 +10,7 @@ function createSlug(projectConfiguration, location) {
   
 exports.addProjectConfiguration = async (req, res) => {
     try {
-        const { location, projectConfiguration, meta_title, meta_key, meta_desc, projectType, ctcontent, schema } = req.body;
+        const { location, projectConfiguration, meta_title, meta_key, meta_desc, projectType, briefContent, ctcontent, schema } = req.body;
 
         // Create the configuration object
         const config = {
@@ -20,6 +20,7 @@ exports.addProjectConfiguration = async (req, res) => {
             metaKeyword: meta_key,
             metaDescription: meta_desc,
             projectType: projectType,
+            briefContent: briefContent,
             ctcontent: ctcontent,
             schema: schema,
             slugURL: createSlug(projectConfiguration, location),

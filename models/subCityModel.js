@@ -5,6 +5,7 @@ const UserSchemaSubCity = new mongoose.Schema({
     metaKeyword: { type: String },
     metaDescription: { type: String },
     content_type: { type: String },
+    briefContent: {type: String, required: true},
     ctcontent: { type: String },
     schema: { type: String },
     content_above_faqs: { type: String },

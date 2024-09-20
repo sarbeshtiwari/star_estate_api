@@ -10,6 +10,7 @@ const DeveloperSchema = new mongoose.Schema({
     // ongoingProjects: { type: Number, required: false },
     // experience: { type: Number, required: false },
     developerPriority: { type: Number, required: false },
+    briefContent: {type: String, required: true},
     description: { type: String, required: false },
     // developerLogo: { type: String, required: false },
     slugURL: { type: String, required: true },

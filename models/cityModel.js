@@ -5,6 +5,7 @@ const CityDataSchema = new mongoose.Schema({
     metaTitle: { type: String },
     metaKeyword: { type: String },
     metaDescription: { type: String },
+    briefContent: {type: String, required: true},
     ctcontent: { type: String },
     schema: { type: String },
     content_above_faqs: { type: String },

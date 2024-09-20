@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
     metaKeyword: { type: String, required: false },
     metaDescription: { type: String, required: false },
     category: { type: String, required: true },
+    briefContent: {type: String, required: true},
     content: { type: String, required: false },
     slugURL: {type: String, required: true},
     status: { type: Boolean, required: false, default: false }

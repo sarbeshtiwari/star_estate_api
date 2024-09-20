@@ -129,9 +129,8 @@ router.get('/projectsConfig/:slug', async (req, res) => {
         // Call the getProjectConfigurationBySlugURL function
         const cityData = await getProjectConfiguration(cityLocation, slug);
 
-        if (cityData.error) {
-            return res.status(404).json({ success: false, message: cityData.error });
-        }
+        // If no configuration data is found, return empty cityData
+        const validCityData = cityData && cityData.length > 0 ? cityData : [];
 
         // Search for projects with matching cityLocation and projectConfiguration
         const projects = await Project.find({
@@ -139,30 +138,27 @@ router.get('/projectsConfig/:slug', async (req, res) => {
             projectConfiguration: new RegExp(projectConfiguration, 'i') // flexible search
         });
 
-        if (!projects.length) {
-            return res.status(404).json({ success: false, message: 'No projects found' });
-        }
+        // If no projects are found, return an empty array
+        const validProjects = projects.length > 0 ? projects : [];
 
-        res.status(200).json({ success: true, cityData, projects });
+        // Respond with success and either empty or found data
+        res.status(200).json({ success: true, cityData: validCityData, projects: validProjects });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 });
 
-
 const getProjectConfiguration = async (cityLocation, slugURL) => {
     try {
-        console.log(cityLocation, slugURL)
+        console.log(cityLocation, slugURL);
         const projectConfiguration = await ProjectConfiguration.find({
             location: cityLocation,
             slugURL: slugURL
         });
 
-        if (!projectConfiguration.length) {
-            return { error: 'Project Configuration or type not found' };
-        }
-        if (projectConfiguration[0].status === false) {
-            return '';
+        // If no configuration is found or the status is false, return empty data
+        if (!projectConfiguration.length || projectConfiguration[0].status === false) {
+            return [];
         }
 
         return projectConfiguration;

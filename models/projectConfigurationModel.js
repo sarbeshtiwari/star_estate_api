@@ -10,6 +10,7 @@ const projectSchema = new mongoose.Schema({
         metaDescription: { type: String },
         // projectConfiguration: { type: String, required: true },
         // projectType: {type: String, required: true},
+        briefContent: {type: String, required: true},
         ctcontent: { type: String, required: false },
         schema: { type: String, required: false },
         

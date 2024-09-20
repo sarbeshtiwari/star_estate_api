@@ -14,7 +14,7 @@ const createSlug = (text) => {
 
 // Add a category
 const addCategory = async (req, res) => {
-    const { metaTitle, metaKeyword, metaDescription, category, content, status } = req.body;
+    const { metaTitle, metaKeyword, metaDescription, briefContent, category, content, status } = req.body;
 
     if (!category) {
         return res.status(400).json({ success: false, message: "Category is required" });
@@ -29,7 +29,7 @@ const addCategory = async (req, res) => {
             return res.json({ success: false, message: "Category already found" });
         }
 
-        const newCategory = new UserModel({ metaTitle, metaKeyword, metaDescription, category, content, slugURL, status });
+        const newCategory = new UserModel({ metaTitle, metaKeyword, metaDescription, briefContent, category, content, slugURL, status });
         await newCategory.save();
         res.json({ success: true, message: "Category added successfully" });
     } catch (err) {
@@ -141,14 +141,14 @@ const deleteCategory = async (req, res) => {
 // Update category details
 const updateCategory = async (req, res) => {
     const { id } = req.params;
-    const { metaTitle, metaKeyword, metaDescription, category, content } = req.body;
+    const { metaTitle, metaKeyword, metaDescription, briefContent, category, content } = req.body;
 
     if (!category) {
         return res.status(400).json({ success: false, message: "Category is required" });
     }
 
     try {
-        const updatedCategory = await UserModel.findByIdAndUpdate(id, { metaTitle, metaKeyword, metaDescription, category, content }, { new: true });
+        const updatedCategory = await UserModel.findByIdAndUpdate(id, { metaTitle, metaKeyword, metaDescription, briefContent, category, content }, { new: true });
 
         if (!updatedCategory) {
             return res.status(404).json({ success: false, message: "Category not found" });

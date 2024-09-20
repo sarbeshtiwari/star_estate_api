@@ -15,9 +15,6 @@ exports.addSubCity = async (req, res) => {
     const { city, sub_city, priority, status, data } = req.body;
     const file = req.file;
 
-    console.log(req.body);
-    console.log(req.file);
-
     const parsedData = JSON.parse(data);
 
     if (!city || !sub_city || !Array.isArray(parsedData)) {

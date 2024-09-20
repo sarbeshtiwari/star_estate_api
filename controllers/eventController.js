@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const moment = require('moment');
 const deleteFromCloudinary = require('../middlewares/delete_cloudinery_image');
+const ImageModel = require('../models/imageModel');
 
 const createSlug = (text) => {
     return text
@@ -146,15 +147,23 @@ exports.deleteEvent = async (req, res) => {
             return res.status(404).json({ success: false, message: "Event not found" });
         }
 
+        const slugURL = event.slugURL;
+        console.log(`Deleting event with slug: ${slugURL}`);
+
+        // Delete associated image if it exists
         if (event.eventImage) {
             await deleteFromCloudinary(event.eventImage);
-
         }
 
+        // Delete all images associated with the event using slugURL
+        await ImageModel.deleteMany({ eventId: slugURL });
+
+        // Delete the event document
         await EventModel.findByIdAndDelete(id);
-        res.json({ success: true, message: "Event and associated image deleted successfully" });
+        res.json({ success: true, message: `Event with slug ${slugURL} and associated images deleted successfully` });
     } catch (err) {
         console.error("Delete Error:", err);
         res.status(500).send("Internal Server Error");
     }
 };
+
