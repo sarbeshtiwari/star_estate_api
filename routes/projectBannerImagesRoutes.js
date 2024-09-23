@@ -29,6 +29,31 @@ router.post('/addImages', upload.fields([
         res.status(500).json({ error: error.message });
     }
 });
+// router.post('/addImages', upload.fields([
+//     { name: 'desktop_image', maxCount: 10 },
+//     { name: 'mobile_image', maxCount: 10 },
+//     { name: 'tablet_image', maxCount: 10 }
+// ]), async (req, res) => {
+//     try {
+//         const { alt_tag_desktop, alt_tag_mobile, alt_tag_tablet, projectName } = req.body;
+
+//         const newBanner = new BannerImage({
+//             desktop_image_url: req.files.desktop_image ? req.files.desktop_image.map(file => file.path) : [],
+//             mobile_image_url: req.files.mobile_image ? req.files.mobile_image.map(file => file.path) : [],
+//             tablet_image_url: req.files.tablet_image ? req.files.tablet_image.map(file => file.path) : [],
+//             alt_tag_desktop: alt_tag_desktop,  // Assuming this comes as an array from frontend
+//             alt_tag_mobile: alt_tag_mobile,    // Assuming this comes as an array from frontend
+//             alt_tag_tablet: alt_tag_tablet,    // Assuming this comes as an array from frontend
+//             projectName: projectName[0]        // Use the first value as projectName is repeated
+//         });
+
+//         await newBanner.save();
+//         res.status(201).json(newBanner);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
+
 
 // Get all banner images
 router.get('/get/:projectName', async (req, res) => {

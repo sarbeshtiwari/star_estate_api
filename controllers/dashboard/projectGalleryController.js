@@ -114,16 +114,29 @@ exports.updateProjectGalleryHomeStatus = async (req, res) => {
     }
 
     try {
-        // If setting the current item's displayHome to true, ensure no other items are true
-        if (displayHome === true) {
-            // Find and update the item where displayHome is currently true
-            await ProjectsGallery.updateMany(
-                { displayHome: true },
-                { displayHome: false }
-            );
+        // Find the project by id to get the projectName
+        const project = await ProjectsGallery.findById(id);
+        
+        if (!project) {
+            return res.status(404).json({ success: false, message: "Project not found" });
         }
 
-        // Update the current item
+        const projectname = project.projectname;
+
+        // Find all projects with the same projectName
+        const projectsWithSameName = await ProjectsGallery.find({ projectname });
+
+        // Log the project names and their displayHome status
+        console.log("Projects with the same name:", projectsWithSameName.map(p => ({ id: p._id, displayHome: p.displayHome })));
+
+        // Check if any project has displayHome set to true and reset it to false (other than the current project)
+        for (const otherProject of projectsWithSameName) {
+            if (otherProject.displayHome === true && otherProject._id.toString() !== id) {
+                await ProjectsGallery.findByIdAndUpdate(otherProject._id, { displayHome: false });
+            }
+        }
+
+        // Update the displayHome status of the current project
         const updatedData = await ProjectsGallery.findByIdAndUpdate(id, { displayHome }, { new: true });
 
         if (!updatedData) {
@@ -144,32 +157,47 @@ exports.updateProjectGalleryHomeStatus = async (req, res) => {
     }
 };
 
+
+
+
 exports.updateProjectGalleryAmenityStatus = async (req, res) => {
     const { id } = req.params;
     const { amenityImage } = req.body;
 
     if (typeof amenityImage !== 'boolean') {
-        return res.status(400).json({ success: false, message: "DisplayHome must be a boolean value (true or false)" });
+        return res.status(400).json({ success: false, message: "AmenityHome must be a boolean value (true or false)" });
     }
 
     try {
-        // If setting the current item's displayHome to true, ensure no other items are true
-        if (amenityImage === true) {
-            // Find and update the item where displayHome is currently true
-            await ProjectsGallery.updateMany(
-                { amenityImage: true },
-                { amenityImage: false }
-            );
+       const project = await ProjectsGallery.findById(id);
+        
+        if (!project) {
+            return res.status(404).json({ success: false, message: "Project not found" });
         }
 
-        // Update the current item
+        const projectname = project.projectname;
+
+        // Find all projects with the same projectName
+        const projectsWithSameName = await ProjectsGallery.find({ projectname });
+
+        // Log the project names and their displayHome status
+        console.log("Projects with the same name:", projectsWithSameName.map(p => ({ id: p._id, amenityImage: p.amenityImage })));
+
+        // Check if any project has displayHome set to true and reset it to false (other than the current project)
+        for (const otherProject of projectsWithSameName) {
+            if (otherProject.amenityImage === true && otherProject._id.toString() !== id) {
+                await ProjectsGallery.findByIdAndUpdate(otherProject._id, { amenityImage: false });
+            }
+        }
+
+        // Update the displayHome status of the current project
         const updatedData = await ProjectsGallery.findByIdAndUpdate(id, { amenityImage }, { new: true });
 
         if (!updatedData) {
             return res.status(404).json({ success: false, message: "Data not found" });
         }
 
-        res.json({ success: true, message: "Data amenityImage status updated successfully", updatedData });
+        res.json({ success: true, message: "Data displayHome status updated successfully", updatedData });
     } catch (err) {
         console.error(err);
 

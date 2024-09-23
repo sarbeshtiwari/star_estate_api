@@ -8,7 +8,23 @@ const bannerImageSchema = new mongoose.Schema({
     alt_tag_mobile: { type: String, required: false },
     alt_tag_tablet: { type: String, required: false },
     projectName: {type: String, required: true},
-    status: {type: Boolean, required: false, default: false}
+    status: {type: Boolean, required: false, default: true}
 }, { timestamps: true });
 
 module.exports = mongoose.model('ProjectBannerImage', bannerImageSchema);
+
+
+// const mongoose = require('mongoose');
+
+// const bannerImageSchema = new mongoose.Schema({
+//     desktop_image_url: { type: [String], required: false },  // Store as array of strings
+//     mobile_image_url: { type: [String], required: false },   // Store as array of strings
+//     tablet_image_url: { type: [String], required: false },   // Store as array of strings
+//     alt_tag_desktop: { type: [String], required: false },    // Store as array of strings
+//     alt_tag_mobile: { type: [String], required: false },     // Store as array of strings
+//     alt_tag_tablet: { type: [String], required: false },     // Store as array of strings
+//     projectName: { type: String, required: true },
+//     status: { type: Boolean, required: false, default: true }
+// }, { timestamps: true });
+
+// module.exports = mongoose.model('ProjectBannerImage', bannerImageSchema);

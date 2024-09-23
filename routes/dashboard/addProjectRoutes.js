@@ -168,6 +168,74 @@ const getProjectConfiguration = async (cityLocation, slugURL) => {
     }
 };
 
+router.get('/search', async (req, res) => {
+    const { searchTerm } = req.query;
+
+    if (!searchTerm) {
+        return res.status(400).json({ message: 'Search term is required' });
+    }
+
+    try {
+        // Using a case-insensitive regex to match the search term in multiple fields
+        const regex = new RegExp(searchTerm, 'i'); // 'i' for case-insensitive search
+        const projects = await Project.find({
+            $or: [
+                { projectName: regex },
+                { slugURL: regex },
+                { projectBy: regex },
+                { cityLocation: regex },
+            ],
+        });
+
+        if (projects.length > 0) {
+            const results = projects.map(project => {
+                const response = {};
+
+                // Check for matches in the fields and populate the response
+                if (project.projectName.match(regex)) {
+                    response.projectName = {
+                        matchedTerm: searchTerm,
+                        value: project.projectName,
+                    };
+                }
+                if (project.projectBy.match(regex)) {
+                    response.projectBy = {
+                        matchedTerm: searchTerm,
+                        value: project.projectBy,
+                    };
+                }
+                if (project.cityLocation.match(regex)) {
+                    response.cityLocation = {
+                        matchedTerm: searchTerm,
+                        value: project.cityLocation,
+                    };
+                }
+
+                // if(project.projectName.match(regex)){
+                //     response.projectName = {
+                //         matchedTerm: searchTerm,
+                //         value: project.projectName
+                //     }
+                // }
+
+                // Include the project details as necessary
+                return {
+                    ...response,
+                    slugURL: project.slugURL,
+                };
+            });
+
+            return res.json(results);
+        } else {
+            return res.json({ message: 'Data not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
 
 
 module.exports = router;
