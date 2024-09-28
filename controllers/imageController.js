@@ -12,7 +12,8 @@ exports.uploadEventImages = async (req, res) => {
     }
 
     try {
-        const imagePaths = files.map(file => file.filename);
+        // `star_estate/events/gallery/${file.filename}`
+        const imagePaths = files.map(file => `star_estate/events/gallery/${file.filename}`);
 
         const imageDocuments = imagePaths.map(imagePath => ({
             eventId: id,

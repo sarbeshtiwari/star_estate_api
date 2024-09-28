@@ -12,7 +12,7 @@ exports.addProjectRera = async (req, res) => {
 
         ProjectReraArray.forEach((item, index) => {
             if (req.files[index]) {
-                item.image = req.files[index].filename;
+                item.image = `star_estate/star_rera/${req.files[index].filename}`;
             }
         });
 
@@ -138,7 +138,7 @@ exports.updateProjectRera = async (req, res) => {
 
         updates.forEach((update, index) => {
             if (req.files[index]) {
-                update.image = req.files[index].filename;
+                update.image = `star_estate/star_rera/${req.files[index].filename}`;
             }
         });
 

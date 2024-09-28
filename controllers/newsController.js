@@ -43,8 +43,8 @@ exports.addNews = async (req, res) => {
         newsDate,
         newsState,
         imageTitle,
-        newsThumb: req.files.newsThumb[0].filename, // Assuming single file per field
-        newsImage: req.files.newsImage[0].filename,
+        newsThumb: `star_estate/news/${req.files.newsThumb[0].filename}`, // Assuming single file per field
+        newsImage: `star_estate/news/${req.files.newsImage[0].filename}`,
         slugURL,
         status        
     });
@@ -148,11 +148,11 @@ exports.updateNews = async (req, res) => {
         if (req.files) {
             if (req.files.newsThumb) {
                 console.log("Updating newsThumb:", req.files.newsThumb[0].filename);
-                updateData.newsThumb = req.files.newsThumb[0].filename;
+                updateData.newsThumb = `star_estate/news/${req.files.newsThumb[0].filename}`;
             }
             if (req.files.newsImage) {
                 console.log("Updating newsImage:", req.files.newsImage[0].filename);
-                updateData.newsImage = req.files.newsImage[0].filename;
+                updateData.newsImage = `star_estate/news/${req.files.newsImage[0].filename}`;
             }
         }
 

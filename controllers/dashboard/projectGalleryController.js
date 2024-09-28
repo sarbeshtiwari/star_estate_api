@@ -21,8 +21,8 @@ exports.addProjectGallery = async (req, res) => {
         const updatedGalleryArray = ProjectGalleryArray.map(item => {
             return {
                 ...item,
-                desktopImage: desktopImage ? desktopImage.filename : item.desktopImage,
-                mobileImage: mobileImage ? mobileImage.filename : item.mobileImage
+                desktopImage: desktopImage ? `star_estate/project_gallery/${desktopImage.filename}` : item.desktopImage,
+                mobileImage: mobileImage ? `star_estate/project_gallery/${mobileImage.filename}` : item.mobileImage
             };
         });
 
@@ -46,7 +46,8 @@ exports.getProjectGallery = async (req, res) => {
         const projectGallery = await ProjectsGallery.find({ projectname: project });
 
         if (projectGallery.length === 0) {
-            return res.status(404).send("Project not found");
+            return res.status(400).json({ success: false, message: "No Data found for this Project" });
+            // return res.status(404).send("Project not found");
         }
 
         res.json(projectGallery);
@@ -271,11 +272,11 @@ exports.updateProjectGallery = async (req, res) => {
         // Update each entry
         for (const update of updates) {
             if (desktopImageFile) {
-                update.desktopImage = desktopImageFile.filename;
+                update.desktopImage = `star_estate/project_gallery/${desktopImageFile.filename}`;
             }
 
             if (mobileImageFile) {
-                update.mobileImage = mobileImageFile.filename;
+                update.mobileImage = `star_estate/project_gallery/${mobileImageFile.filename}`;
             }
 
             await ProjectsGallery.findByIdAndUpdate(id, update, { new: true, runValidators: true });

@@ -73,7 +73,7 @@ app.use(cors(corsOptions));
 // };
 
 // Static File Serving
-app.use('/uploads', express.static('uploads'));
+app.use('/star_estate', express.static('star_estate'));
 
 // MongoDB Connection
 const dbConfig = require('./config/db');

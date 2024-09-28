@@ -36,7 +36,7 @@ exports.createEvent = async (req, res) => {
         metaDescription, 
         eventName,
         eventDate,
-        eventImage: req.file ? req.file.filename : null,
+        eventImage: req.file ? `star_estate/events/${req.file.filename}` : null,
         slugURL,
         status      
     });
@@ -103,7 +103,7 @@ exports.updateEvent = async (req, res) => {
     const updateData = req.body;
 
     if (req.file) {
-        updateData.eventImage = req.file.filename;
+        updateData.eventImage = `star_estate/events/${req.file.filename}`;
     }
 
     try {

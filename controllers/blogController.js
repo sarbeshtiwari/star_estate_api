@@ -52,7 +52,7 @@ exports.createBlog = async (req, res) => {
             blogsDate,
             blogsCategory,
             blogsLink,
-            blogsImage: req.file.filename,
+            blogsImage: `star_estate/blogs/${req.file.filename}`,
             imageTitle,
             content,
             slugURL,
@@ -122,7 +122,7 @@ exports.getBlogBySlugURL = async (req, res) => {
 exports.updateBlog = async (req, res) => {
     const updateData = req.body;
     if (req.file) {
-        updateData.blogsImage = req.file.filename;
+        updateData.blogsImage = `star_estate/blogs/${req.file.filename}`;
     }
 
     try {

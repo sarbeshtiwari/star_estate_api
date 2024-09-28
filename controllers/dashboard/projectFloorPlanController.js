@@ -12,7 +12,7 @@ exports.addFloorPlan = async (req, res) => {
 
         FloorPlanArray.forEach((floorPlan, index) => {
             if (req.files[index]) {
-                floorPlan.image = req.files[index].filename;
+                floorPlan.image = `star_estate/floor_plan/${req.files[index].filename}`;
             }
         });
 
@@ -131,7 +131,7 @@ exports.updateFloorPlan = async (req, res) => {
 
         updates.forEach((update, index) => {
             if (req.files[index]) {
-                update.image = req.files[index].filename;
+                update.image = `star_estate/floor_plan/${req.files[index].filename}`;
             }
         });
 

@@ -29,6 +29,70 @@ const createSlug = (text) => {
 
 
 
+// exports.addProject = async (req, res) => {
+//     try {
+//         const {
+//             metaTitle,
+//             metaKeyword,
+//             metaDescription,
+//             projectName,
+//             projectAddress,
+//             state,
+//             cityLocation,
+//             projectLocality,
+//             projectConfiguration,
+//             projectBy,
+//             projectType,
+//             projectPrice,
+//             ivr_no,
+//             locationMap,
+//             rera_no,
+//             reraWebsite,
+//             city_priority,
+//             luxury_priority,
+//             newLaunch_priority,
+//             featured_priority,
+//             recent_priority,
+//             residential_priority,
+//             commercial_priority,
+//             project_status,
+
+//             status,
+//             property_type
+//         } = req.body;
+
+//         if (!projectName || !projectAddress || !cityLocation ||
+//             !projectConfiguration || !projectBy || !projectPrice ||
+//             !rera_no || !property_type) {
+//             return res.status(400).json({ message: 'Required fields are missing' });
+//         }
+
+//         const existingProject = await Project.findOne({ projectName });
+//         if (existingProject) {
+//             return res.status(409).json({ success: false, message: "Project name already found" });
+//         }
+
+//         const slugURL = createSlug(projectName);
+
+//         const project = new Project({
+//             ...req.body, slugURL,
+            
+//             project_logo: req.files.project_logo[0].filename,
+//             project_thumbnail: req.files.project_thumbnail[0].filename,
+//             rera_qr: req.files.rera_qr[0].filename,
+//             locationMap: req.files.locationMap[0].filename,
+//             // project_logo: req.file ? req.file.path : null,
+//             // project_thumbnail: req.file ? req.file.path : null
+//         });
+
+//         await project.save();
+//         res.json({ success: true, message: "Project added successfully" });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: error.message });
+//     }
+// };
+
 exports.addProject = async (req, res) => {
     try {
         const {
@@ -69,7 +133,7 @@ exports.addProject = async (req, res) => {
 
         const existingProject = await Project.findOne({ projectName });
         if (existingProject) {
-            return res.json({ success: false, message: "Project name already found" });
+            return res.status(409).json({ success: false, message: "Project name already found" });
         }
 
         const slugURL = createSlug(projectName);
@@ -77,10 +141,11 @@ exports.addProject = async (req, res) => {
         const project = new Project({
             ...req.body, slugURL,
             
-            project_logo: req.files.project_logo[0].filename,
-            project_thumbnail: req.files.project_thumbnail[0].filename,
-            rera_qr: req.files.rera_qr[0].filename,
-            locationMap: req.files.locationMap[0].filename,
+            // project_logo: `star_estate/projects/${req.files.project_logo[0].filename}`,
+            project_logo: `star_estate/projects/${req.files.project_logo[0].filename}`,
+            project_thumbnail: `star_estate/projects/${req.files.project_thumbnail[0].filename}`,
+            rera_qr: `star_estate/projects/${req.files.rera_qr[0].filename}`,
+            locationMap: `star_estate/projects/${req.files.locationMap[0].filename}`,
             // project_logo: req.file ? req.file.path : null,
             // project_thumbnail: req.file ? req.file.path : null
         });
@@ -130,33 +195,64 @@ exports.getProjectById = async (req, res) => {
     }
 };
 
+// exports.updateProject = async (req, res) => {
+//     try {
+//         const updateData = req.body;
+//         if (req.files) {
+//             if (req.files.rera_qr && req.files.rera_qr[0]) {
+//                 updateData.rera_qr = req.files.rera_qr[0].filename;
+//             }
+//             if (req.files.project_thumbnail && req.files.project_thumbnail[0]) {
+//                 updateData.project_thumbnail = req.files.project_thumbnail[0].filename;
+//             }
+//             if (req.files.project_logo && req.files.project_logo[0]) {
+//                 updateData.project_logo = req.files.project_logo[0].filename;
+//             }
+//             if (req.files.locationMap && req.files.locationMap[0]) {
+//                 updateData.locationMap = req.files.locationMap[0].filename;
+//             }
+//         }
+//         const updatedProject = await Project.findByIdAndUpdate(req.params.id, updateData, { new: true });
+//         if (!updatedProject) {
+//             return res.status(404).json({ success: false, message: "Project not found" });
+//         }
+//         res.json({ success: true, message: "Project updated successfully", updatedProject });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: "Internal Server Error" });
+//     }
+// };
+
 exports.updateProject = async (req, res) => {
     try {
         const updateData = req.body;
+
         if (req.files) {
             if (req.files.rera_qr && req.files.rera_qr[0]) {
-                updateData.rera_qr = req.files.rera_qr[0].filename;
+                updateData.rera_qr = `star_estate/projects/${req.files.rera_qr[0].filename}`;
             }
             if (req.files.project_thumbnail && req.files.project_thumbnail[0]) {
-                updateData.project_thumbnail = req.files.project_thumbnail[0].filename;
+                updateData.project_thumbnail = `star_estate/projects/${req.files.project_thumbnail[0].filename}`;
             }
             if (req.files.project_logo && req.files.project_logo[0]) {
-                updateData.project_logo = req.files.project_logo[0].filename;
+                updateData.project_logo = `star_estate/projects/${req.files.project_logo[0].filename}`;
             }
             if (req.files.locationMap && req.files.locationMap[0]) {
-                updateData.locationMap = req.files.locationMap[0].filename;
+                updateData.locationMap = `star_estate/projects/${req.files.locationMap[0].filename}`;
             }
         }
+
         const updatedProject = await Project.findByIdAndUpdate(req.params.id, updateData, { new: true });
         if (!updatedProject) {
             return res.status(404).json({ success: false, message: "Project not found" });
         }
         res.json({ success: true, message: "Project updated successfully", updatedProject });
     } catch (error) {
-        console.error(error);
+        console.error('Error updating project:', error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
+
 
 exports.updateProjectStatus = async (req, res) => {
     try {
@@ -308,46 +404,39 @@ exports.deleteProject = async (req, res) => {
         
         // Get the project slug URL
         const projectSlugURL = project.slugURL;
-        
-        // Delete project logo, thumbnail, RERA QR, and location map from Cloudinary (if they exist)
+
+        // Function to delete a file from the local storage
+        const deleteLocalFile = (filePath) => {
+            if (fs.existsSync(filePath)) {
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        console.error(`Failed to delete file: ${filePath}`, err);
+                    }
+                });
+            }
+        };
+
+        // Delete project logo, thumbnail, RERA QR, and location map from local storage (if they exist)
         if (project.project_logo) {
-            await deleteFromCloudinary(project.project_logo);
+            deleteLocalFile(path.join(__dirname, '../star_estate/projects', project.project_logo)); // Assuming these are stored in star_estate/projects folder
         }
         if (project.project_thumbnail) {
-            await deleteFromCloudinary(project.project_thumbnail);
+            deleteLocalFile(path.join(__dirname, '../star_estate/projects', project.project_thumbnail));
         }
         if (project.rera_qr) {
-            await deleteFromCloudinary(project.rera_qr);
+            deleteLocalFile(path.join(__dirname, '../star_estate/projects', project.rera_qr));
         }
         if (project.locationMap) {
-            await deleteFromCloudinary(project.locationMap);
+            deleteLocalFile(path.join(__dirname, '../star_estate/projects', project.locationMap));
         }
 
-        // 1. Delete Banner Images and remove from Cloudinary
-        const bannerImages = await BannerImage.find({ projectName: projectSlugURL });
-        for (const banner of bannerImages) {
-            if (banner.imageUrl) {
-                await deleteFromCloudinary(banner.imageUrl); // Assuming banner.imageUrl stores the image path in Cloudinary
-            }
-        }
+        // Delete Banner Images from the database
         await BannerImage.deleteMany({ projectName: projectSlugURL });
 
-        // 2. Delete Floor Plans and remove from Cloudinary
-        const floorPlans = await FloorPlanModel.find({ projectname: projectSlugURL });
-        for (const floorPlan of floorPlans) {
-            if (floorPlan.imageUrl) {
-                await deleteFromCloudinary(floorPlan.imageUrl); // Assuming floorPlan.imageUrl stores the image path in Cloudinary
-            }
-        }
+        // Delete Floor Plans from the database
         await FloorPlanModel.deleteMany({ projectname: projectSlugURL });
 
-        // 3. Delete Gallery Images and remove from Cloudinary
-        const galleryImages = await ProjectsGallery.find({ projectname: projectSlugURL });
-        for (const gallery of galleryImages) {
-            if (gallery.imageUrl) {
-                await deleteFromCloudinary(gallery.imageUrl); // Assuming gallery.imageUrl stores the image path in Cloudinary
-            }
-        }
+        // Delete Gallery Images from the database
         await ProjectsGallery.deleteMany({ projectname: projectSlugURL });
 
         // Delete other related documents (without images)
@@ -367,6 +456,75 @@ exports.deleteProject = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+// exports.deleteProject = async (req, res) => {
+//     try {
+//         // Find the project by ID
+//         const project = await Project.findById(req.params.id);
+//         if (!project) {
+//             return res.status(404).json({ success: false, message: "Project not found" });
+//         }
+        
+//         // Get the project slug URL
+//         const projectSlugURL = project.slugURL;
+        
+//         // Delete project logo, thumbnail, RERA QR, and location map from Cloudinary (if they exist)
+//         if (project.project_logo) {
+//             await deleteFromCloudinary(project.project_logo);
+//         }
+//         if (project.project_thumbnail) {
+//             await deleteFromCloudinary(project.project_thumbnail);
+//         }
+//         if (project.rera_qr) {
+//             await deleteFromCloudinary(project.rera_qr);
+//         }
+//         if (project.locationMap) {
+//             await deleteFromCloudinary(project.locationMap);
+//         }
+
+//         // 1. Delete Banner Images and remove from Cloudinary
+//         const bannerImages = await BannerImage.find({ projectName: projectSlugURL });
+//         for (const banner of bannerImages) {
+//             if (banner.imageUrl) {
+//                 await deleteFromCloudinary(banner.imageUrl); // Assuming banner.imageUrl stores the image path in Cloudinary
+//             }
+//         }
+//         await BannerImage.deleteMany({ projectName: projectSlugURL });
+
+//         // 2. Delete Floor Plans and remove from Cloudinary
+//         const floorPlans = await FloorPlanModel.find({ projectname: projectSlugURL });
+//         for (const floorPlan of floorPlans) {
+//             if (floorPlan.imageUrl) {
+//                 await deleteFromCloudinary(floorPlan.imageUrl); // Assuming floorPlan.imageUrl stores the image path in Cloudinary
+//             }
+//         }
+//         await FloorPlanModel.deleteMany({ projectname: projectSlugURL });
+
+//         // 3. Delete Gallery Images and remove from Cloudinary
+//         const galleryImages = await ProjectsGallery.find({ projectname: projectSlugURL });
+//         for (const gallery of galleryImages) {
+//             if (gallery.imageUrl) {
+//                 await deleteFromCloudinary(gallery.imageUrl); // Assuming gallery.imageUrl stores the image path in Cloudinary
+//             }
+//         }
+//         await ProjectsGallery.deleteMany({ projectname: projectSlugURL });
+
+//         // Delete other related documents (without images)
+//         await UserModel.deleteMany({ projectname: projectSlugURL });
+//         await ContentModel.deleteMany({ projectname: projectSlugURL });
+//         await WalkthroughModel.deleteMany({ projectname: projectSlugURL });
+//         await ProjectAmenitiesModel.deleteMany({ projectname: projectSlugURL });
+//         await ProjectLocationModel.deleteMany({ projectname: projectSlugURL });
+
+//         // Finally, delete the project itself
+//         await Project.findByIdAndDelete(req.params.id);
+
+//         res.json({ success: true, message: "Project and all related documents (including images) deleted successfully" });
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// };
 
 exports.getProjectByCity = async (req, res) => {
     try {

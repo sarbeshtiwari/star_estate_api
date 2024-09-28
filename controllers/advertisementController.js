@@ -30,7 +30,7 @@ exports.createAdvertisements = async (req, res) => {
         advertisementDate,
         advertisementTitle,
         videoURL,
-        advertisementImage: req.file ? req.file.filename : ' ',
+        advertisementImage: req.file ? `star_estate/advertisements/${req.file.filename}` : ' ',
         status      
     });
 
@@ -95,7 +95,7 @@ exports.updateAdvertisements = async (req, res) => {
     const updateData = req.body;
 
     if (req.file) {
-        updateData.eventImage = req.file.filename;
+        updateData.eventImage = `star_estate/advertisements/${req.file.filename}`;
     }
 
     try {

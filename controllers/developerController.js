@@ -54,7 +54,7 @@ exports.createDeveloper = async (req, res) => {
             // ongoingProjects, 
             // experience, 
             developerPriority, 
-            // developerLogo: req.file ? req.file.filename : null, 
+            // developerLogo: req.file ? `star_estate/developers/${req.file.filename}` : null, 
             briefContent,
             description, 
             slugURL,
@@ -115,7 +115,7 @@ exports.updateDeveloper = async (req, res) => {
     const updateData = req.body;
 
     // if (req.file) {
-    //     updateData.developerLogo = req.file.filename;
+    //     updateData.developerLogo = `star_estate/developers/${req.file.filename}`;
     // }
 
     try {

@@ -25,7 +25,7 @@ exports.createAwards = async (req, res) => {
         metaDescription, 
         awardName,
         awardDate,
-        awardImage: req.file ? req.file.filename : null,
+        awardImage: req.file ? `star_estate/awards/${req.file.filename}` : null,
         status      
     });
 
@@ -90,7 +90,7 @@ exports.updateAwards = async (req, res) => {
     const updateData = req.body;
 
     if (req.file) {
-        updateData.eventImage = req.file.filename;
+        updateData.eventImage = `star_estate/awards/${req.file.filename}`;
     }
 
     try {

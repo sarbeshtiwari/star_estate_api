@@ -14,9 +14,9 @@ router.post('/addImages', upload.fields([
         const { alt_tag_desktop, alt_tag_mobile, alt_tag_tablet } = req.body;
 
         const newBanner = new BannerImage({
-            desktop_image_url: req.files.desktop_image ? req.files.desktop_image[0].path : '',
-            mobile_image_url: req.files.mobile_image ? req.files.mobile_image[0].path : '',
-            tablet_image_url: req.files.tablet_image ? req.files.tablet_image[0].path : '',
+            desktop_image_url: req.files.desktop_image ? `star_estate/BannerImage/${req.files.desktop_image[0].path}` : '',
+            mobile_image_url: req.files.mobile_image ? `star_estate/BannerImage/${req.files.mobile_image[0].path}` : '',
+            tablet_image_url: req.files.tablet_image ? `star_estate/BannerImage/${req.files.tablet_image[0].path}` : '',
             alt_tag_desktop,
             alt_tag_mobile,
             alt_tag_tablet,

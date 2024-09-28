@@ -36,7 +36,7 @@ exports.createCareer = async (req, res) => {
             category,
             location,
             job_type,
-            resume: req.file.filename,
+            resume: `star_estate/career_query/${req.file.filename}`,
             created_at, 
             // note, 
             // utm_source,

@@ -13,7 +13,7 @@ exports.addBankList = async (req, res) => {
 
         BankListArray.forEach((bank_list, index) => {
             if (req.files[index]) {
-                bank_list.image = req.files[index].filename;
+                bank_list.image = `star_estate/banks_list/${req.files[index].filename}`;
             }
         });
 
@@ -132,7 +132,7 @@ exports.updateBankList = async (req, res) => {
 
         updates.forEach((update, index) => {
             if (req.files[index]) {
-                update.image = req.files[index].filename;
+                update.image = `star_estate/banks_list/${req.files[index].filename}`;
             }
         });
 

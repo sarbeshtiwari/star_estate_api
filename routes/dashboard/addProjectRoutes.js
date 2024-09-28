@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const projectController = require('../../controllers/dashboard/addProjectController');
-const upload = require('../../middlewares/addProject_multerMiddlewares');
+const {upload} = require('../../middlewares/addProject_multerMiddlewares');
 const Project = require('../../models/dashboard/addProjectModel');
 const ProjectConfiguration = require('../../models/projectConfigurationModel');
 
@@ -13,6 +13,8 @@ router.post('/addProject', upload.fields([
     { name : 'rera_qr', maxCount: 1},
     {name: 'locationMap', maxCount: 1}
 ]),projectController.addProject)
+
+
 router.get('/getProject', projectController.getProjects);
 
 router.get('/getProjectById/:id', projectController.getProjectById);

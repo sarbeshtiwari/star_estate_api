@@ -22,7 +22,7 @@ exports.addLocationAdvantages = async (req, res) => {
         // Attach image file names to LocationAdvantagesArray
         locationAdvantagesArray.forEach((locationAdvantage, index) => {
             if (req.files[index]) {
-                locationAdvantage.image = req.files[index].filename;
+                locationAdvantage.image = `star_estate/location_advantages/${req.files[index].filename}`;
             }
         });
 
@@ -121,7 +121,7 @@ exports.updateLocationAdvantage = async (req, res) => {
 
         updates.forEach((update, index) => {
             if (req.files[index]) {
-                update.image = req.files[index].filename;
+                update.image = `star_estate/location_advantages/${req.files[index].filename}`;
             }
         });
 

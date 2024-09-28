@@ -11,7 +11,7 @@ exports.addSubAmenity = async (req, res) => {
 
         amenitiesArray.forEach((amenity, index) => {
             if (req.files[index]) {
-                amenity.image = req.files[index].filename;
+                amenity.image = `star_estate/amenities/${req.files[index].filename}`;
             }
         });
 
@@ -120,7 +120,7 @@ exports.updateSubAmenity = async (req, res) => {
 
         updates.forEach((update, index) => {
             if (req.files[index]) {
-                update.image = req.files[index].filename;
+                update.image = `star_estate/amenities/${req.files[index].filename}`;
             }
         });
         console.log('done')
